@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir \"C:\\AssortedApps\\GetGoat\\app\\app\" /b)",
+      "Bash(ls:*)",
+      "Bash(node -e:*)",
+      "Bash(npm run postinstall:*)",
+      "Bash(npm run dev:*)",
+      "Bash(timeout 5 bash:*)",
+      "Bash(npm run db:push:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

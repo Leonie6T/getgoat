@@ -1,17 +1,17 @@
 # dependencies
-node_modules/
-.pnp
+/node_modules
+/.pnp
 .pnp.js
 
 # testing
-coverage/
+/coverage
 
 # next.js
-.next/
-out/
+/.next/
+/out/
 
 # production
-build/
+/build
 
 # misc
 .DS_Store
@@ -25,7 +25,6 @@ yarn-error.log*
 # local env files
 .env*.local
 .env
-.env.local
 
 # vercel
 .vercel
@@ -35,15 +34,4 @@ yarn-error.log*
 next-env.d.ts
 
 # prisma
-prisma/migrations/
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-Thumbs.db
-.DS_Store
-
+/prisma/migrations
