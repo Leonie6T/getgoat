@@ -35,6 +35,7 @@ Let the seller:
 
 - Seller login (one account).
 - Goat listing: photos, video, breed, sex, age, weight, colour, identification mark (tattoo / brand / ear tag), price, status.
+- Doe breeding info (shown only when sex = Doe): pregnant (Yes / No / Not sure), expected kidding month, kids born before (Yes / No), number of kiddings. Shown on the goat page and as a "Pregnant" badge in the marketplace.
 - Goat status: Available → Reserved (during payment) → Sold → Collected.
 - Share one goat to WhatsApp (link + short message + rich preview).
 - Share marketplace (all available goats) to WhatsApp.
