@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Logo } from "@/components/Logo";
 
 export default function GoatsPage() {
@@ -16,6 +17,9 @@ export default function GoatsPage() {
         <p className="text-lg font-semibold">No goats listed yet.</p>
         <p className="mt-1 text-muted">Check back soon.</p>
       </div>
+      <footer className="mt-10 border-t border-line pt-4 text-center text-sm">
+        <Link href="/seller" className="text-muted">Seller login</Link>
+      </footer>
     </main>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState } from "react";
 import { LogoMark } from "@/components/Logo";
 import { login, type LoginState } from "./actions";
@@ -49,6 +50,9 @@ export default function LoginPage() {
           {pending ? "Logging in…" : "Log in"}
         </button>
       </form>
+      <Link href="/goats" className="mt-6 flex min-h-11 items-center justify-center font-semibold">
+        ← Back to goats
+      </Link>
     </main>
   );
 }
