@@ -1,4 +1,4 @@
-# GetGoat – Legal Requirements Memo (v1)
+# Online Goat Market – Legal Requirements Memo (v1)
 
 > Not legal advice. Decision (owner): accept the field list in §3 as is. No external legal check before go-live.
 
@@ -18,7 +18,7 @@
 - A person who moves stock must carry a document from the owner (or authorised agent) that identifies the stock.
 - The official removal certificate form asks for the **full name and identity number** of the issuer and of the person who moves the stock, their addresses, signature and date.
 
-### Conclusion for GetGoat
+### Conclusion for Online Goat Market
 
 The buyer usually collects. So the buyer (or the buyer's driver) is the person who moves the stock. **Collect the buyer's ID number, and the driver's ID number when someone else collects.**
 

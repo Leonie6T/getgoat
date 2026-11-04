@@ -40,7 +40,8 @@ export async function generateMetadata({ params }: { params: Promise<{ code: str
       title,
       description,
       url: `${origin}/g/${goat.code}`,
-      images: cover ? [{ url: `${origin}${mediaUrl(cover.pathname)}` }] : [],
+      siteName: "Online Goat Market",
+      images: [{ url: cover ? `${origin}${mediaUrl(cover.pathname)}` : `${origin}/brand/online-goat-market-1200.jpg` }],
     },
     twitter: { card: "summary_large_image" },
   };

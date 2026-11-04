@@ -1,4 +1,4 @@
-# GetGoat – User Flows (v1)
+# Online Goat Market – User Flows (v1)
 
 ## A. Seller: add a goat
 

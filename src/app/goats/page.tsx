@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { GoatCard } from "@/components/GoatCard";
-import { BrofourLogo } from "@/components/BrofourLogo";
-import { LogoMark } from "@/components/Logo";
+import { BrofourMark } from "@/components/BrofourLogo";
+import { APP_NAME, Logo } from "@/components/Logo";
 import { TopBar } from "@/components/TopBar";
 import { db } from "@/lib/db";
 import { ageLabel, buyerStatus, formatRand, mediaUrl } from "@/lib/goats";
@@ -18,11 +18,16 @@ export async function generateMetadata(): Promise<Metadata> {
     where: { kind: "PHOTO", goat: { status: "AVAILABLE" } },
     orderBy: [{ goat: { createdAt: "desc" } }, { sortOrder: "asc" }],
   });
-  const title = `Goats for sale · ${SELLER_NAME}`;
+  const title = `Goats for sale · ${APP_NAME}`;
   return {
     title,
     description: `Tap to see goats for sale from ${SELLER_NAME}.`,
-    openGraph: { title, url: `${origin}/goats`, images: cover ? [`${origin}${mediaUrl(cover.pathname)}`] : [] },
+    openGraph: {
+      title,
+      siteName: APP_NAME,
+      url: `${origin}/goats`,
+      images: [cover ? `${origin}${mediaUrl(cover.pathname)}` : `${origin}/brand/online-goat-market-1200.jpg`],
+    },
   };
 }
 
@@ -50,7 +55,7 @@ export default async function GoatsPage({ searchParams }: { searchParams: Promis
   return (
     <div className="mx-auto flex min-h-dvh max-w-md flex-col">
       <TopBar
-        title={<BrofourLogo />}
+        title={<Logo />}
         right={
           <a href={`tel:${SELLER_PHONE_TEL}`} className="flex min-h-11 items-center text-[14px] font-semibold">
             {SELLER_PHONE}
@@ -102,7 +107,7 @@ export default async function GoatsPage({ searchParams }: { searchParams: Promis
       </main>
       <footer className="flex items-center justify-between border-t border-line px-4 py-3 text-sm text-muted">
         <span className="flex items-center gap-1.5">
-          <LogoMark size={20} /> GetGoat
+          <BrofourMark size={20} /> Sold by {SELLER_NAME}
         </span>
         <Link href="/seller" className="text-muted">
           Seller login

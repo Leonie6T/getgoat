@@ -1,4 +1,4 @@
-# getgoat
+# Online Goat Market (getgoat)
 
 Mobile-first goat marketplace for Brofour Farming. Seller shares goats on WhatsApp; buyers view, pay with Payfast and get a stock removal document.
 
