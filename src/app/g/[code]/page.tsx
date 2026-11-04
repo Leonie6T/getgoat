@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 import { SoldStamp } from "@/components/GoatCard";
@@ -6,7 +7,7 @@ import { TopBar } from "@/components/TopBar";
 import { IconAge, IconBaby, IconChat, IconColour, IconFemale, IconPhone, IconSex, IconWeight } from "@/components/icons";
 import { db } from "@/lib/db";
 import { MARK_LABEL, PREGNANT_LABEL, SEX_LABEL, ageLabel, buyerStatus, formatRand, goatTitle, mediaUrl } from "@/lib/goats";
-import { SELLER_NAME, SELLER_PHONE, SELLER_PHONE_TEL, siteUrl } from "@/lib/site";
+import { SELLER_PHONE, SELLER_PHONE_TEL, siteUrl } from "@/lib/site";
 import { Gallery } from "./Gallery";
 
 export const dynamic = "force-dynamic";
@@ -55,7 +56,6 @@ export default async function GoatPage({ params }: { params: Promise<{ code: str
   const photos = goat.media.filter((m) => m.kind === "PHOTO");
   const video = goat.media.find((m) => m.kind === "VIDEO");
   const link = `${await siteUrl()}/g/${goat.code}`;
-  const buyMessage = `Hi, I want to buy this goat: ${goatTitle(goat)}, ${formatRand(goat.priceCents)}, tag ${goat.idMarkValue}. ${link}`;
 
   const facts = [
     { label: "Sex", value: SEX_LABEL[goat.sex], Icon: goat.sex === "DOE" ? IconFemale : IconSex },
@@ -149,15 +149,14 @@ export default async function GoatPage({ params }: { params: Promise<{ code: str
         ) : held ? (
           <p className="text-center text-lg font-bold text-amber-ink">Someone is buying this goat now. Try again in 15 minutes.</p>
         ) : (
-          // Online payment arrives in slice 4; until then the button opens a WhatsApp chat with the seller.
           <>
-            <a
-              href={chatUrl(buyMessage)}
+            <Link
+              href={`/g/${goat.code}/buy`}
               className="flex min-h-14 items-center justify-center rounded-xl bg-green text-xl font-bold text-white no-underline"
             >
               Buy this goat
-            </a>
-            <p className="mt-1 text-center text-[12px] text-muted">Opens a WhatsApp chat with {SELLER_NAME}</p>
+            </Link>
+            <p className="mt-1 text-center text-[12px] text-muted">Pay safely online with Payfast</p>
           </>
         )}
       </div>
