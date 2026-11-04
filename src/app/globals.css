@@ -1,29 +1,29 @@
 @import "tailwindcss";
 
+/* Wireframe style: plain system font, light ground, white bordered cards, one green. */
 @theme {
-  --color-sand: #f4ecdd;
-  --color-milk: #fffbf3;
-  --color-ink: #1c1a16;
-  --color-muted: #5e5648;
-  --color-line: #d9c9ac;
-  --color-veld: #1f4a2e;
-  --color-veld-dark: #0f2a19;
-  --color-veld-tint: #dce8df;
-  --color-acacia: #b5432a;
-  --color-ochre: #e2a33b;
+  --color-ground: #f6f6f3;
+  --color-card: #ffffff;
+  --color-ink: #1f2321;
+  --color-muted: #555555;
+  --color-line: #d9d9d4;
+  --color-green: #1f6b3a;
+  --color-green-dark: #14502a;
+  --color-green-tint: #e7f2ea;
+  --color-amber-tint: #fff3dc;
+  --color-amber-ink: #7a4300;
 
-  --font-display: var(--font-bricolage), system-ui, sans-serif;
-  --font-sans: var(--font-figtree), system-ui, sans-serif;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
 @layer base {
   body {
-    background: var(--color-sand);
+    background: var(--color-ground);
     color: var(--color-ink);
     font-family: var(--font-sans);
   }
 
   a {
-    color: var(--color-veld);
+    color: var(--color-green);
   }
 }
