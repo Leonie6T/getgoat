@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { markOrderPaid, releaseOrder } from "@/lib/orders";
-import { confirmWithPayfast, isPayfastIp, payfastConfig, payfastSignature } from "@/lib/payfast";
+import { confirmWithPayfast, isPayfastIp, itnSignatureOk, payfastConfig } from "@/lib/payfast";
 
 /**
  * Payfast ITN (server-to-server payment notification). Checks, in order:
@@ -13,7 +13,7 @@ export async function POST(request: Request) {
   const data = Object.fromEntries(fields);
   const cfg = payfastConfig();
 
-  if (payfastSignature(fields, cfg.passphrase, true) !== data.signature) {
+  if (!itnSignatureOk(fields, data.signature)) {
     console.warn("ITN rejected: bad signature", data.m_payment_id);
     return new Response("OK");
   }
