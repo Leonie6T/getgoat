@@ -23,7 +23,7 @@ Let the seller:
 ## 4. Design principles
 
 - **Pictures first.** Large photos and video. Large price in Rand. Icons with short labels.
-- **Few words, plain words.** English and isiXhosa. Language switch on every page.
+- **Few words, plain words.** English only. Icons with short labels.
 - **One action per screen.** One large main button.
 - **Light pages.** Must load fast on 3G. Compressed images. Video loads only on tap.
 - **Ask late.** Ask for buyer details only after the buyer taps "Buy".
@@ -46,7 +46,6 @@ Let the seller:
 - Order record in the app. Seller sees who paid and whether to release.
 - Email to seller when payment is confirmed.
 - Stock removal document generated automatically as PDF. Seller downloads it and sends it on WhatsApp by hand. Seller prints and signs by hand at collection. Optional uploaded signature image on the PDF.
-- English and isiXhosa.
 - POPIA consent and privacy notice.
 
 ### v2 (later)
@@ -54,7 +53,6 @@ Let the seller:
 - Several goats in one order (cart). One payment, one document that lists all animals.
 - Automatic WhatsApp messages (WhatsApp Business API).
 - Push notifications.
-- More languages.
 - Deposits.
 
 ## 6. Multi-goat readiness
@@ -86,6 +84,17 @@ See `03-legal-memo.md` for the legal basis.
 
 ## 8. Seller details (stored once in settings)
 
+Known now:
+
+- Business name: Brofour Farming
+- Company registration no.: 2021/853086/07
+- Contact number: 083 442 6012
+
+Still needed: authorised representative name and ID number, farm physical address, registered animal identification mark and its registration number (Animal Identification Act), email.
+
+All fields:
+
+
 Full name, ID number, farm name, farm physical address (place of removal), cellphone, email, registered identification mark and registration number, optional signature image.
 
 ## 9. Order states
@@ -113,6 +122,5 @@ Full name, ID number, farm name, farm physical address (place of removal), cellp
 - Payfast (onsite redirect, ITN webhook, signature check).
 - PDF generation on the server (pdf-lib or React-PDF).
 - Transactional email (Resend or Postmark).
-- i18n: English and isiXhosa.
 
 Volume: 50 or fewer goats a month. Free or low-cost tiers are enough.

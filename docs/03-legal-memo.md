@@ -1,6 +1,6 @@
 # GetGoat – Legal Requirements Memo (v1)
 
-> Not legal advice. Verify the final field list with the SAPS Stock Theft Unit or a lawyer before go-live.
+> Not legal advice. Decision (owner): accept the field list in §3 as is. No external legal check before go-live.
 
 ## 1. Stock Theft Act 57 of 1959
 
@@ -34,7 +34,7 @@ The buyer usually collects. So the buyer (or the buyer's driver) is the person w
 | Section | Fields |
 |---|---|
 | Document | Document number (= order number), date of sale, date of removal |
-| Seller / owner | Full name, ID number, farm name, address (place of removal), cellphone, registered mark + registration number |
+| Seller / owner | Business name + company reg. no., authorised representative full name + ID number, farm name, address (place of removal), cellphone, registered mark + registration number |
 | Buyer / receiver | Full name, ID / passport number, address (destination), cellphone |
 | Person removing (if not buyer) | Full name, ID number |
 | Transport | Vehicle registration (optional) |
@@ -60,7 +60,7 @@ The buyer usually collects. So the buyer (or the buyer's driver) is the person w
 - Retention: keep order and document at least 1 year (s6). Proposed: 3 years, then delete or anonymise.
 - Name an information officer (the seller).
 
-## 7. Open items to verify
+## 7. Known limits (accepted)
 
 1. Exact current s6(1)(a) particulars (session could not open acts.co.za).
 2. Whether a newer prescribed form replaces the 1991 removal certificate.
