@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { GoatCard } from "@/components/GoatCard";
-import { BrofourMark } from "@/components/BrofourLogo";
 import { APP_NAME, Logo } from "@/components/Logo";
 import { TopBar } from "@/components/TopBar";
 import { db } from "@/lib/db";
@@ -107,7 +106,7 @@ export default async function GoatsPage({ searchParams }: { searchParams: Promis
       </main>
       <footer className="flex items-center justify-between border-t border-line px-4 py-3 text-sm text-muted">
         <span className="flex items-center gap-1.5">
-          <BrofourMark size={20} /> Sold by {SELLER_NAME}
+          Sold by {SELLER_NAME}
         </span>
         <Link href="/seller" className="text-muted">
           Seller login

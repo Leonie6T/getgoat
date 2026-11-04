@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BrofourLogo } from "@/components/BrofourLogo";
+import { Logo } from "@/components/Logo";
 import { ShareLink } from "@/components/ShareButton";
 import { TopBar } from "@/components/TopBar";
 import { db } from "@/lib/db";
@@ -24,7 +24,7 @@ export default async function SellerHome() {
   return (
     <div className="mx-auto min-h-dvh max-w-md pb-10">
       <TopBar
-        title={<BrofourLogo />}
+        title={<Logo size={36} />}
         right={
           <form action={logout}>
             <button className="min-h-11 px-1 text-sm text-muted">Log out</button>
