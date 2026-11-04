@@ -21,7 +21,7 @@ export default async function PayPage({ params }: { params: Promise<{ id: string
     orderId: order.id,
     orderNumber: orderNumber(order.number),
     amountCents: order.totalCents,
-    itemName: `${goatTitle(goat)} (${goat.idMarkValue})`,
+    itemName: `${goatTitle(goat)} ${goat.idMarkValue}`,
     buyerName: order.buyer.fullName,
     buyerEmail: order.buyer.email,
     buyerCell: order.buyer.cellphone,

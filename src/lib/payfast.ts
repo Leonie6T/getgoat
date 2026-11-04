@@ -49,6 +49,19 @@ export type PaymentRequest = {
   origin: string;
 };
 
+/**
+ * Payfast's signature check is sensitive to special characters (brackets, quotes, accents).
+ * Keep only plain letters, digits and simple punctuation in free-text fields.
+ */
+function plain(value: string, max = 100) {
+  return value
+    .normalize("NFKD")
+    .replace(/[^A-Za-z0-9 .,\-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, max);
+}
+
 /** Ordered form fields for the redirect to Payfast (order matters for the signature). */
 export function paymentFields(req: PaymentRequest) {
   const cfg = payfastConfig();
@@ -59,16 +72,17 @@ export function paymentFields(req: PaymentRequest) {
     ["return_url", `${req.origin}/order/${req.orderId}`],
     ["cancel_url", `${req.origin}/order/${req.orderId}/cancel`],
     ["notify_url", `${req.origin}/api/payfast/itn`],
-    ["name_first", first ?? ""],
-    ["name_last", rest.join(" ")],
+    ["name_first", plain(first ?? "", 100)],
+    ["name_last", plain(rest.join(" "), 100)],
     ["email_address", req.buyerEmail ?? ""],
     ["cell_number", req.buyerCell.replace(/\D/g, "")],
     ["m_payment_id", req.orderId],
     ["amount", (req.amountCents / 100).toFixed(2)],
-    ["item_name", req.itemName.slice(0, 100)],
-    ["item_description", `Order ${req.orderNumber}`],
+    ["item_name", plain(req.itemName)],
+    ["item_description", plain(`Order ${req.orderNumber}`)],
   ];
-  const nonEmpty = fields.filter(([, v]) => v !== "");
+  // The posted values must be exactly the signed values: trim, then drop empty ones.
+  const nonEmpty = fields.map(([k, v]) => [k, v.trim()] as [string, string]).filter(([, v]) => v !== "");
   return {
     action: `https://${cfg.host}/eng/process`,
     fields: [...nonEmpty, ["signature", payfastSignature(nonEmpty, cfg.passphrase)]] as [string, string][],
