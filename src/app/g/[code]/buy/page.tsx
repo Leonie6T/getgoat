@@ -45,7 +45,7 @@ export default async function BuyPage({ params }: { params: Promise<{ code: stri
             <p className="text-lg font-bold">
               {status === "RESERVED" ? "Someone is paying for this goat right now." : "This goat is sold."}
             </p>
-            <p className="text-muted">{status === "RESERVED" ? "Try again in 15 minutes." : "See the other goats for sale."}</p>
+            <p className="text-muted">{status === "RESERVED" ? "Try again in 5 minutes." : "See the other goats for sale."}</p>
             <Link href="/goats" className="flex min-h-12 items-center justify-center rounded-xl bg-green font-bold text-white no-underline">
               See goats for sale
             </Link>

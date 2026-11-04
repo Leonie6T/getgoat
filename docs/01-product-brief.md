@@ -96,7 +96,7 @@ App display only (marketplace header, emails): Brofour Farming Â· 083 442 6012 Â
 
 | State | Meaning | Who changes it |
 |---|---|---|
-| Pending payment | Buyer is on Payfast. Goat is reserved for 15 minutes. | System |
+| Pending payment | Buyer is on Payfast. Goat is reserved for 5 minutes. | System |
 | Paid | Payfast confirmed (ITN). Goat is SOLD. Email sent. Document generated. | System |
 | Released / Collected | Buyer collected the goat. | Seller |
 | Cancelled / Expired | Payment failed or timed out. Goat is available again. | System |

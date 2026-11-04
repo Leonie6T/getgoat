@@ -110,7 +110,7 @@ export async function startCheckout(goatCode: string, _prev: BuyState, formData:
     return {
       error:
         fresh?.status === "RESERVED"
-          ? "Someone is paying for this goat right now. Try again in 15 minutes."
+          ? "Someone is paying for this goat right now. Try again in 5 minutes."
           : "Sorry, this goat has just been sold.",
     };
   }
