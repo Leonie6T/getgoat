@@ -34,7 +34,7 @@ The buyer usually collects. So the buyer (or the buyer's driver) is the person w
 | Section | Fields |
 |---|---|
 | Document | Document number (= order number), date of sale, date of removal |
-| Seller / owner | Business name + company reg. no., authorised representative full name + ID number, farm name, address (place of removal), cellphone, registered mark + registration number |
+| Seller / owner (**left open: blank lines, completed by hand**) | Business name + company reg. no., authorised representative full name + ID number, farm name, address (place of removal), cellphone, registered mark + registration number |
 | Buyer / receiver | Full name, ID / passport number, address (destination), cellphone |
 | Person removing (if not buyer) | Full name, ID number |
 | Transport | Vehicle registration (optional) |

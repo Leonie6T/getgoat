@@ -1,45 +1,48 @@
 import Link from "next/link";
-import { LogoMark } from "@/components/Logo";
+import { TopBar } from "@/components/TopBar";
 import { logout } from "./login/actions";
 
 export default function SellerHome() {
   return (
-    <main className="mx-auto max-w-md">
-      <section className="flex flex-col gap-4 rounded-b-3xl bg-veld px-4 pb-6 pt-5 text-milk">
-        <div className="flex items-center gap-2.5">
-          <LogoMark size={32} inverted />
-          <h1 className="font-display text-[22px] font-extrabold">Brofour Farming</h1>
-          <form action={logout} className="ml-auto">
-            <button className="min-h-11 rounded-xl px-3 text-sm font-semibold text-milk/80">Log out</button>
+    <div className="mx-auto min-h-dvh max-w-md">
+      <TopBar
+        title="GetGoat · Seller"
+        right={
+          <form action={logout}>
+            <button className="min-h-11 px-1 text-sm text-muted">Log out</button>
           </form>
+        }
+      />
+      <main>
+        <div className="grid grid-cols-2 gap-2 p-4">
+          <Link
+            href="/seller"
+            className="rounded-xl border border-[#e3c98f] bg-amber-tint p-3 text-ink no-underline"
+          >
+            <div className="text-[28px] font-extrabold">0</div>
+            <div className="text-sm">Paid – to release</div>
+          </Link>
+          <div className="rounded-xl border border-line bg-card p-3">
+            <div className="text-[28px] font-extrabold">0</div>
+            <div className="text-sm">Goats for sale</div>
+          </div>
         </div>
-        <div className="grid grid-cols-3 gap-2">
-          <Stat value="0" label="To release" highlight />
-          <Stat value="0" label="For sale" />
-          <Stat value="R 0" label="This month" />
+        <div className="px-4 pb-3">
+          <Link
+            href="/goats"
+            className="flex min-h-[52px] items-center justify-center rounded-xl bg-green text-[17px] font-bold text-white no-underline"
+          >
+            View marketplace
+          </Link>
         </div>
-      </section>
-      <div className="grid grid-cols-2 gap-2.5 p-4">
-        <Link
-          href="/goats"
-          className="flex min-h-14 items-center justify-center rounded-2xl bg-veld font-bold text-milk no-underline shadow-[0_3px_0_var(--color-veld-dark)]"
-        >
-          View marketplace
-        </Link>
-        <span className="flex min-h-14 items-center justify-center rounded-2xl border-2 border-ink/30 font-bold text-ink/40">
-          + Add goat (next)
-        </span>
-      </div>
-      <p className="px-4 text-muted">Slice 1 is live. Adding goats comes in slice 2.</p>
-    </main>
-  );
-}
-
-function Stat({ value, label, highlight }: { value: string; label: string; highlight?: boolean }) {
-  return (
-    <div className={`rounded-2xl p-2.5 ${highlight ? "bg-ochre text-ink" : "bg-milk/10"}`}>
-      <div className="font-display text-[28px] font-extrabold">{value}</div>
-      <div className="text-[13px] font-semibold">{label}</div>
+        <div className="flex items-center justify-between px-4 pb-2">
+          <span className="text-lg font-bold">My goats</span>
+          <span className="flex min-h-11 items-center rounded-[10px] border-2 border-line px-3.5 font-bold text-muted">
+            + Add goat
+          </span>
+        </div>
+        <p className="px-4 text-muted">No goats yet. Adding goats comes in the next update.</p>
+      </main>
     </div>
   );
 }

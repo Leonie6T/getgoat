@@ -2,53 +2,54 @@
 
 import { useActionState } from "react";
 import { LogoMark } from "@/components/Logo";
+import { TopBar } from "@/components/TopBar";
 import { login, type LoginState } from "./actions";
+
+const inputClass =
+  "min-h-12 rounded-[10px] border border-[#9a9a94] bg-card px-3 text-[17px] font-normal outline-none focus:border-green focus:ring-2 focus:ring-green-tint";
 
 export default function LoginPage() {
   const [state, formAction, pending] = useActionState<LoginState, FormData>(login, {});
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-sm flex-col justify-center px-4">
-      <div className="mb-6 flex items-center gap-3">
-        <LogoMark size={44} />
-        <h1 className="font-display text-[28px] font-extrabold tracking-tight">Seller login</h1>
-      </div>
-      <form action={formAction} className="flex flex-col gap-3">
-        <label className="flex flex-col gap-1.5 text-[15px] font-bold">
-          Email
-          <input
-            key={state.email}
-            name="email"
-            type="email"
-            defaultValue={state.email}
-            autoComplete="username"
-            required
-            className="min-h-[52px] rounded-[14px] border-2 border-line bg-milk px-3.5 text-[17px] font-normal outline-none focus:border-veld"
-          />
-        </label>
-        <label className="flex flex-col gap-1.5 text-[15px] font-bold">
-          Password
-          <input
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            required
-            className="min-h-[52px] rounded-[14px] border-2 border-line bg-milk px-3.5 text-[17px] font-normal outline-none focus:border-veld"
-          />
-        </label>
-        {state.error && (
-          <p role="alert" className="rounded-xl bg-[#F6DCD4] px-3 py-2 text-[15px] text-[#7A2A17]">
-            {state.error}
-          </p>
-        )}
-        <button
-          type="submit"
-          disabled={pending}
-          className="mt-2 min-h-[58px] rounded-[18px] bg-veld text-lg font-bold text-milk shadow-[0_4px_0_var(--color-veld-dark)] disabled:opacity-60"
-        >
-          {pending ? "Logging in…" : "Log in"}
-        </button>
-      </form>
-    </main>
+    <div className="mx-auto flex min-h-dvh max-w-md flex-col">
+      <TopBar back={{ href: "/goats", label: "All goats" }} />
+      <main className="flex flex-1 flex-col justify-center px-4 pb-16">
+        <div className="mb-5 flex items-center gap-3">
+          <LogoMark size={40} />
+          <h1 className="text-[22px] font-extrabold">Seller login</h1>
+        </div>
+        <form action={formAction} className="flex flex-col gap-3">
+          <label className="flex flex-col gap-1 text-[15px] font-semibold">
+            Email
+            <input
+              key={state.email}
+              name="email"
+              type="email"
+              defaultValue={state.email}
+              autoComplete="username"
+              required
+              className={inputClass}
+            />
+          </label>
+          <label className="flex flex-col gap-1 text-[15px] font-semibold">
+            Password
+            <input name="password" type="password" autoComplete="current-password" required className={inputClass} />
+          </label>
+          {state.error && (
+            <p role="alert" className="rounded-[10px] bg-amber-tint px-3 py-2 text-[15px] text-amber-ink">
+              {state.error}
+            </p>
+          )}
+          <button
+            type="submit"
+            disabled={pending}
+            className="mt-2 min-h-14 rounded-xl bg-green text-xl font-bold text-white disabled:opacity-60"
+          >
+            {pending ? "Logging in…" : "Log in"}
+          </button>
+        </form>
+      </main>
+    </div>
   );
 }

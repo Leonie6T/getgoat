@@ -65,7 +65,7 @@ OrderItem
 
 ### 3.2 Removal document
 
-- Generated server-side with `pdf-lib` from Seller + Order + Buyer + OrderItems.
+- Generated server-side with `pdf-lib` from Order + Buyer + OrderItems. Seller section and removal date are printed as blank lines, completed by hand.
 - Stored privately (Vercel Blob or Cloudinary private raw). Seller downloads via signed URL from the order page only.
 - Seller signature image placed on the signature line if uploaded. Print-and-sign is the legal route.
 
