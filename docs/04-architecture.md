@@ -7,7 +7,7 @@
 | App | Next.js (App Router, TypeScript), mobile-first, PWA-ready | One codebase for buyer pages, seller admin and API. Server rendering gives fast first load and WhatsApp link previews. |
 | Hosting | Vercel (Hobby → Pro if needed) | Zero-ops, HTTPS, custom domain, preview deploys per branch. |
 | Database | PostgreSQL on Neon (free tier) + Prisma ORM | Relational data (orders, items), row locking for reservations. |
-| Media | Cloudinary (free tier) | Auto-compress, resize, WebP/AVIF, video transcoding. Critical for 3G. |
+| Media | Vercel Blob (private store) | Photos resized on the phone (1600 px + 480 px thumb) before upload; direct presigned uploads; served via `/m/...` with long cache; videos via short-lived presigned redirect (range requests). |
 | Payments | Payfast (redirect + ITN webhook) | South African, supports card, Instant EFT, Capitec Pay, SnapScan. |
 | PDF | `pdf-lib` on the server | Small, no headless browser, works on Vercel functions. |
 | Email | Resend (free tier) | Seller notification on paid order. |
@@ -31,7 +31,7 @@ Goat
   reservedUntil?, createdAt, updatedAt
 
 GoatMedia
-  id, goatId, kind (PHOTO|VIDEO), cloudinaryId, sortOrder
+  id, goatId, kind (PHOTO|VIDEO), pathname, thumbPathname, sortOrder
 
 Buyer
   id, fullName, idNumber(enc), cellphone, address, email?

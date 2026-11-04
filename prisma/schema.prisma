@@ -93,12 +93,16 @@ model Goat {
 }
 
 model GoatMedia {
-  id           String    @id @default(cuid())
-  goatId       String
-  goat         Goat      @relation(fields: [goatId], references: [id], onDelete: Cascade)
-  kind         MediaKind
-  cloudinaryId String
-  sortOrder    Int       @default(0)
+  id            String    @id @default(cuid())
+  goatId        String
+  goat          Goat      @relation(fields: [goatId], references: [id], onDelete: Cascade)
+  kind          MediaKind
+  /// Blob pathname under goats/ (served via /m/...)
+  pathname      String
+  /// Small JPEG for cards and thumbnails (photos only)
+  thumbPathname String?
+  sortOrder     Int       @default(0)
+  createdAt     DateTime  @default(now())
 
   @@index([goatId, sortOrder])
 }
