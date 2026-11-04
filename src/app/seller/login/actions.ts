@@ -1,5 +1,6 @@
 "use server";
 
+import { createHash, timingSafeEqual } from "node:crypto";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -13,16 +14,23 @@ export async function login(_prev: LoginState, formData: FormData): Promise<Logi
 
   const expectedEmail = process.env.SELLER_EMAIL?.trim().toLowerCase();
   const hash = process.env.SELLER_PASSWORD_HASH;
-  if (!expectedEmail || !hash) {
-    return { error: "Login is not set up yet. Add SELLER_EMAIL and SELLER_PASSWORD_HASH.", email };
+  const plain = process.env.SELLER_PASSWORD;
+  if (!expectedEmail || (!hash && !plain)) {
+    return { error: "Login is not set up yet. Add SELLER_EMAIL and SELLER_PASSWORD.", email };
   }
 
-  const ok = email === expectedEmail && (await bcrypt.compare(password, hash));
+  const passwordOk = hash ? await bcrypt.compare(password, hash) : sameText(password, plain!);
+  const ok = email === expectedEmail && passwordOk;
   if (!ok) return { error: "Wrong email or password.", email };
 
   const token = await createSessionToken(email);
   (await cookies()).set(SESSION_COOKIE, token, sessionCookieOptions);
   redirect("/seller");
+}
+
+function sameText(a: string, b: string) {
+  const digest = (v: string) => createHash("sha256").update(v).digest();
+  return timingSafeEqual(digest(a), digest(b));
 }
 
 export async function logout() {
