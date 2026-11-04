@@ -82,20 +82,15 @@ Collected after "Buy" and before payment:
 
 See `03-legal-memo.md` for the legal basis.
 
-## 8. Seller details (stored once in settings)
+## 8. Seller details
 
-Known now:
+**Decision:** the seller section of the removal document stays **open** (blank lines). The seller completes it by hand at collection, because the details can change (for example who represents the business, or where the goats are collected).
 
-- Business name: Brofour Farming
-- Company registration no.: 2021/853086/07
-- Contact number: 083 442 6012
+- Buyer section: filled from the buyer's checkout details.
+- Stock section: filled from the goat record.
+- Seller section and date of removal: blank lines, completed by hand.
 
-Still needed: authorised representative name and ID number, farm physical address, registered animal identification mark and its registration number (Animal Identification Act), email.
-
-All fields:
-
-
-Full name, ID number, farm name, farm physical address (place of removal), cellphone, email, registered identification mark and registration number, optional signature image.
+App display only (marketplace header, emails): Brofour Farming · 083 442 6012 · seller email for notifications.
 
 ## 9. Order states
 
