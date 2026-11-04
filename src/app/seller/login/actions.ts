@@ -19,11 +19,6 @@ export async function login(_prev: LoginState, formData: FormData): Promise<Logi
     return { error: "Login is not set up yet. Add SELLER_EMAIL and SELLER_PASSWORD.", email };
   }
 
-  const authSecret = process.env.AUTH_SECRET;
-  if (!authSecret || authSecret.length < 32) {
-    return { error: "Login is not set up yet. AUTH_SECRET must be at least 32 characters.", email };
-  }
-
   const passwordOk = hash ? await bcrypt.compare(password, hash) : sameText(password, plain!);
   const ok = email === expectedEmail && passwordOk;
   if (!ok) return { error: "Wrong email or password.", email };
