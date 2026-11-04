@@ -4,9 +4,11 @@ import { lookup } from "node:dns/promises";
 
 /**
  * Payfast onsite redirect + ITN (instant transaction notification).
- * Without live credentials the app uses Payfast's public sandbox merchant.
+ * Without credentials the app uses Payfast's shared public sandbox merchant. Its passphrase
+ * is not reliable (shared account), so sandbox signs without one unless PAYFAST_PASSPHRASE is set.
  */
-const SANDBOX = { merchantId: "10000100", merchantKey: "46f0cd694581a", passphrase: "jt7NOE43FZPn" };
+const SANDBOX = { merchantId: "10000100", merchantKey: "46f0cd694581a" };
+const SANDBOX_KNOWN_PASSPHRASES = ["", "jt7NOE43FZPn"];
 
 export function payfastConfig() {
   const live = process.env.PAYFAST_MODE === "live";
@@ -15,8 +17,16 @@ export function payfastConfig() {
     host: live ? "www.payfast.co.za" : "sandbox.payfast.co.za",
     merchantId: process.env.PAYFAST_MERCHANT_ID || (live ? "" : SANDBOX.merchantId),
     merchantKey: process.env.PAYFAST_MERCHANT_KEY || (live ? "" : SANDBOX.merchantKey),
-    passphrase: process.env.PAYFAST_PASSPHRASE || (live ? "" : SANDBOX.passphrase),
+    passphrase: process.env.PAYFAST_PASSPHRASE ?? "",
   };
+}
+
+/** ITN signature check. In sandbox, also accept the shared account's known passphrase variants. */
+export function itnSignatureOk(fields: [string, string][], signature: string | undefined) {
+  if (!signature) return false;
+  const cfg = payfastConfig();
+  const candidates = cfg.live ? [cfg.passphrase] : [...new Set([cfg.passphrase, ...SANDBOX_KNOWN_PASSPHRASES])];
+  return candidates.some((p) => payfastSignature(fields, p, true) === signature);
 }
 
 /** PHP urlencode, which Payfast signs with: spaces as +, and !'()*~ encoded. */
