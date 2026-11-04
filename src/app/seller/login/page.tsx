@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { LogoMark } from "@/components/Logo";
 import { TopBar } from "@/components/TopBar";
 import { login, type LoginState } from "./actions";
@@ -10,6 +10,7 @@ const inputClass =
 
 export default function LoginPage() {
   const [state, formAction, pending] = useActionState<LoginState, FormData>(login, {});
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-md flex-col">
@@ -34,7 +35,23 @@ export default function LoginPage() {
           </label>
           <label className="flex flex-col gap-1 text-[15px] font-semibold">
             Password
-            <input name="password" type="password" autoComplete="current-password" required className={inputClass} />
+            <span className="relative">
+              <input
+                name="password"
+                type={showPassword ? "text" : "password"}
+                autoComplete="current-password"
+                required
+                className={`${inputClass} w-full pr-20`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 min-w-16 px-3 text-sm font-semibold text-green"
+                aria-pressed={showPassword}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </span>
           </label>
           {state.error && (
             <p role="alert" className="rounded-[10px] bg-amber-tint px-3 py-2 text-[15px] text-amber-ink">

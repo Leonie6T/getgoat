@@ -85,9 +85,17 @@ export default async function SellerHome() {
                     </div>
                   </div>
                 </Link>
-                {buyerStatus(g) === "AVAILABLE" && (
-                  <ShareLink text={`${goatTitle(g)} · ${formatRand(g.priceCents)}\n${origin}/g/${g.code}`} />
-                )}
+                {buyerStatus(g) === "AVAILABLE" &&
+                  (photo ? (
+                    <ShareLink text={`${goatTitle(g)} · ${formatRand(g.priceCents)}\n${origin}/g/${g.code}`} />
+                  ) : (
+                    <Link
+                      href={`/seller/goats/${g.id}`}
+                      className="flex min-h-11 items-center rounded-lg bg-amber-tint px-3 text-sm font-bold text-amber-ink no-underline"
+                    >
+                      Add photo
+                    </Link>
+                  ))}
               </li>
             );
           })}

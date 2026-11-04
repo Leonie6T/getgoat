@@ -49,14 +49,18 @@ export function GoatForm({ goat }: { goat?: GoatValues }) {
         <Field label="Colour" error={err.colour}>
           <input name="colour" defaultValue={goat?.colour ?? ""} placeholder="Red / white" className={inputClass} />
         </Field>
-        <Field label="Price (R)" error={err.priceRand}>
-          <input
-            name="priceRand"
-            inputMode="numeric"
-            defaultValue={goat ? goat.priceCents / 100 : ""}
-            placeholder="2500"
-            className={inputClass}
-          />
+        <Field label="Price *" error={err.priceRand}>
+          <span className="relative">
+            <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-[17px] text-muted">R</span>
+            <input
+              name="priceRand"
+              inputMode="numeric"
+              defaultValue={goat ? goat.priceCents / 100 : ""}
+              placeholder="2500"
+              aria-invalid={Boolean(err.priceRand)}
+              className={`${inputClass} pl-7`}
+            />
+          </span>
         </Field>
         <Field label="ID mark type" error={err.idMarkType}>
           <select name="idMarkType" defaultValue={goat?.idMarkType ?? "EAR_TAG"} className={inputClass}>
@@ -65,8 +69,8 @@ export function GoatForm({ goat }: { goat?: GoatValues }) {
             <option value="EAR_TAG">Ear tag</option>
           </select>
         </Field>
-        <Field label="ID mark / tag no." error={err.idMarkValue}>
-          <input name="idMarkValue" defaultValue={goat?.idMarkValue ?? ""} placeholder="BG-0142" className={inputClass} />
+        <Field label="ID mark / tag no. *" error={err.idMarkValue}>
+          <input name="idMarkValue" defaultValue={goat?.idMarkValue ?? ""} placeholder="BG-0142" aria-invalid={Boolean(err.idMarkValue)} className={inputClass} />
         </Field>
       </div>
 
@@ -121,6 +125,9 @@ export function GoatForm({ goat }: { goat?: GoatValues }) {
         <p role="alert" className="rounded-[10px] bg-amber-tint px-3 py-2 text-[15px] text-amber-ink">
           {state.error}
         </p>
+      )}
+      {!state.error && (
+        <p className="text-[13px] text-muted">* required</p>
       )}
 
       <button type="submit" disabled={pending} className={primaryButton}>
