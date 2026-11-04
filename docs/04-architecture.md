@@ -50,7 +50,7 @@ OrderItem
 
 ### 3.1 Reserve and pay
 
-1. Buyer submits details → server action, in one DB transaction:
+1. Buyer submits details (the hold starts here, not on the Buy tap, so browsing never blocks a goat) → server action:
    - `SELECT … FOR UPDATE` the goat.
    - If `AVAILABLE` (or `RESERVED` with `reservedUntil < now`): set `RESERVED`, `reservedUntil = now + 15 min`.
    - Create `Buyer`, `Order(PENDING)`, `OrderItem`.
@@ -77,7 +77,7 @@ OrderItem
 
 ## 4. Security and POPIA
 
-- ID numbers encrypted at rest (AES-256-GCM, key in env var). Masked in UI lists. Never in email.
+- ID numbers encrypted at rest (AES-256-GCM). Key: `ENCRYPTION_KEY` env var when set (`e1`), else a random key the app creates once and keeps in `AppSetting` (`d1`). Masked in UI lists. Never in email.
 - Seller area behind login; rate-limited.
 - Payfast ITN verified 4 ways (signature, IP, amount, server validate).
 - Retention job: anonymise buyer PII 3 years after order.
