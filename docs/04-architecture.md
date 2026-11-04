@@ -1,4 +1,4 @@
-# GetGoat – Architecture (v1)
+# Online Goat Market – Architecture (v1)
 
 ## 1. Stack
 

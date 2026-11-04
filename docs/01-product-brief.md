@@ -1,4 +1,4 @@
-# GetGoat – Product Brief (v1)
+# Online Goat Market – Product Brief (v1)
 
 ## 1. Problem
 

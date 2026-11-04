@@ -2,8 +2,9 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "GetGoat – Brofour Farming",
+  title: "Online Goat Market – Brofour Farming",
   description: "Goats for sale from Brofour Farming.",
+  applicationName: "Online Goat Market",
 };
 
 export const viewport: Viewport = {
