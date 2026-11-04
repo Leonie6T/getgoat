@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { ConfirmButton } from "@/components/ConfirmButton";
 import { ShareLink } from "@/components/ShareButton";
+import { SubmitButton } from "@/components/SubmitButton";
 import { TopBar } from "@/components/TopBar";
 import { db } from "@/lib/db";
 import { STATUS_LABEL, formatRand, goatTitle } from "@/lib/goats";
@@ -33,9 +34,11 @@ export default async function EditGoatPage({
       } />
       <main className="flex flex-col gap-6 p-4">
         {flags.new && (
-          <p className="rounded-[10px] bg-green-tint px-3 py-2 text-[15px] text-green">Goat saved. Now add photos.</p>
+          <p role="status" className="rounded-[10px] bg-green-tint px-3 py-2 text-[15px] text-green">
+            Goat saved. Now add photos – buyers trust goats with clear photos.
+          </p>
         )}
-        {flags.saved && <p className="rounded-[10px] bg-green-tint px-3 py-2 text-[15px] text-green">Changes saved.</p>}
+        {flags.saved && <p role="status" className="rounded-[10px] bg-green-tint px-3 py-2 text-[15px] text-green">Changes saved.</p>}
 
         <MediaManager
           goatId={goat.id}
@@ -62,9 +65,9 @@ export default async function EditGoatPage({
         <section className="flex flex-col gap-2 border-t border-line pt-4">
           {canHide && (
             <form action={setGoatHidden.bind(null, goat.id, goat.status !== "HIDDEN")}>
-              <button className="min-h-12 w-full rounded-xl border border-line bg-card font-semibold">
+              <SubmitButton pendingText="Saving…" className="min-h-12 w-full rounded-xl border border-line bg-card font-semibold">
                 {goat.status === "HIDDEN" ? "Show in marketplace again" : "Hide from marketplace"}
-              </button>
+              </SubmitButton>
             </form>
           )}
           <form action={deleteGoat.bind(null, goat.id)}>

@@ -26,4 +26,21 @@
   a {
     color: var(--color-green);
   }
+
+  :focus-visible {
+    outline: 3px solid var(--color-green);
+    outline-offset: 2px;
+  }
+
+  button:not(:disabled),
+  [role="button"] {
+    cursor: pointer;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation: none !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }

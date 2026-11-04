@@ -3,9 +3,10 @@ import { notFound } from "next/navigation";
 import { cache } from "react";
 import { SoldStamp } from "@/components/GoatCard";
 import { TopBar } from "@/components/TopBar";
+import { IconAge, IconBaby, IconChat, IconColour, IconFemale, IconPhone, IconSex, IconWeight } from "@/components/icons";
 import { db } from "@/lib/db";
 import { MARK_LABEL, PREGNANT_LABEL, SEX_LABEL, ageLabel, buyerStatus, formatRand, goatTitle, mediaUrl } from "@/lib/goats";
-import { SELLER_PHONE_TEL, siteUrl } from "@/lib/site";
+import { SELLER_NAME, SELLER_PHONE, SELLER_PHONE_TEL, siteUrl } from "@/lib/site";
 import { Gallery } from "./Gallery";
 
 export const dynamic = "force-dynamic";
@@ -57,11 +58,12 @@ export default async function GoatPage({ params }: { params: Promise<{ code: str
   const buyMessage = `Hi, I want to buy this goat: ${goatTitle(goat)}, ${formatRand(goat.priceCents)}, tag ${goat.idMarkValue}. ${link}`;
 
   const facts = [
-    { label: "Sex", value: SEX_LABEL[goat.sex] },
-    { label: "Age", value: ageLabel(goat.ageMonths) },
-    { label: "Weight", value: goat.weightKg ? `${goat.weightKg} kg` : null },
-    { label: "Colour", value: goat.colour },
-  ].filter((f): f is { label: string; value: string } => Boolean(f.value));
+    { label: "Sex", value: SEX_LABEL[goat.sex], Icon: goat.sex === "DOE" ? IconFemale : IconSex },
+    { label: "Age", value: ageLabel(goat.ageMonths), Icon: IconAge },
+    { label: "Weight", value: goat.weightKg ? `${goat.weightKg} kg` : null, Icon: IconWeight },
+    { label: "Colour", value: goat.colour, Icon: IconColour },
+  ].filter((f): f is { label: string; value: string; Icon: typeof IconSex } => Boolean(f.value));
+  const chatUrl = (text: string) => `https://wa.me/${SELLER_PHONE_TEL.replace("+", "")}?text=${encodeURIComponent(text)}`;
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-md flex-col">
@@ -88,7 +90,10 @@ export default async function GoatPage({ params }: { params: Promise<{ code: str
         <div className="grid grid-cols-2 gap-2 py-3">
           {facts.map((f) => (
             <div key={f.label} className="rounded-[10px] border border-line bg-card p-2.5">
-              <div className="text-[12px] text-muted">{f.label}</div>
+              <div className="flex items-center gap-1.5 text-[13px] text-muted">
+                <f.Icon className="size-4" />
+                {f.label}
+              </div>
               <div className="text-lg font-bold">{f.value}</div>
             </div>
           ))}
@@ -98,7 +103,10 @@ export default async function GoatPage({ params }: { params: Promise<{ code: str
                 goat.pregnant === "YES" ? "border-2 border-green bg-green-tint" : "border border-line bg-card"
               }`}
             >
-              <div className="text-[12px] text-muted">Pregnant</div>
+              <div className="flex items-center gap-1.5 text-[13px] text-muted">
+                <IconBaby className="size-4" />
+                Pregnant
+              </div>
               <div className="text-lg font-bold">
                 {PREGNANT_LABEL[goat.pregnant]}
                 {goat.pregnant === "YES" && goat.dueMonth ? ` · due ${goat.dueMonth}` : ""}
@@ -107,7 +115,10 @@ export default async function GoatPage({ params }: { params: Promise<{ code: str
           )}
           {goat.sex === "DOE" && goat.hasKidded != null && (
             <div className="rounded-[10px] border border-line bg-card p-2.5">
-              <div className="text-[12px] text-muted">Kids born</div>
+              <div className="flex items-center gap-1.5 text-[13px] text-muted">
+                <IconBaby className="size-4" />
+                Kids born
+              </div>
               <div className="text-lg font-bold">
                 {goat.hasKidded ? `Yes${goat.kiddingCount ? ` · ${goat.kiddingCount}×` : ""}` : "Not yet"}
               </div>
@@ -115,21 +126,39 @@ export default async function GoatPage({ params }: { params: Promise<{ code: str
           )}
         </div>
         {goat.notes && <p className="text-[15px]">{goat.notes}</p>}
+        <div className="mt-4 grid grid-cols-2 gap-2">
+          <a
+            href={chatUrl(`Hi, I have a question about ${goatTitle(goat)} (tag ${goat.idMarkValue}). ${link}`)}
+            className="flex min-h-12 items-center justify-center gap-1.5 rounded-lg border border-line bg-card font-semibold no-underline"
+          >
+            <IconChat className="size-5" /> Ask a question
+          </a>
+          <a
+            href={`tel:${SELLER_PHONE_TEL}`}
+            className="flex min-h-12 items-center justify-center gap-1.5 rounded-lg border border-line bg-card font-semibold no-underline"
+            aria-label={`Call ${SELLER_PHONE}`}
+          >
+            <IconPhone className="size-5" /> Call
+          </a>
+        </div>
       </main>
 
-      <div className="sticky bottom-0 border-t border-line bg-card p-4">
+      <div className="sticky bottom-0 border-t border-line bg-card px-4 pb-3 pt-3">
         {sold ? (
           <p className="text-center text-lg font-bold text-muted">This goat is sold.</p>
         ) : held ? (
           <p className="text-center text-lg font-bold text-amber-ink">Someone is buying this goat now. Try again in 15 minutes.</p>
         ) : (
           // Online payment arrives in slice 4; until then the button opens a WhatsApp chat with the seller.
-          <a
-            href={`https://wa.me/${SELLER_PHONE_TEL.replace("+", "")}?text=${encodeURIComponent(buyMessage)}`}
-            className="flex min-h-14 items-center justify-center rounded-xl bg-green text-xl font-bold text-white no-underline"
-          >
-            Buy this goat
-          </a>
+          <>
+            <a
+              href={chatUrl(buyMessage)}
+              className="flex min-h-14 items-center justify-center rounded-xl bg-green text-xl font-bold text-white no-underline"
+            >
+              Buy this goat
+            </a>
+            <p className="mt-1 text-center text-[12px] text-muted">Opens a WhatsApp chat with {SELLER_NAME}</p>
+          </>
         )}
       </div>
     </div>

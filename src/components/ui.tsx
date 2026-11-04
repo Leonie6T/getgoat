@@ -1,7 +1,7 @@
 /** Shared wireframe-style form pieces. */
 
 export const inputClass =
-  "min-h-12 w-full rounded-[10px] border border-[#9a9a94] bg-card px-3 text-[17px] font-normal outline-none focus:border-green focus:ring-2 focus:ring-green-tint";
+  "min-h-12 w-full rounded-[10px] border border-[#9a9a94] bg-card px-3 text-[17px] font-normal outline-none focus:border-green focus:ring-2 focus:ring-green-tint aria-[invalid=true]:border-[#a3341b]";
 
 export const primaryButton =
   "flex min-h-14 w-full items-center justify-center rounded-xl bg-green text-xl font-bold text-white no-underline disabled:opacity-60";

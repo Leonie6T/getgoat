@@ -19,13 +19,14 @@ export function MediaManager({ goatId, media, mode }: { goatId: string; media: M
   const video = media.find((m) => m.kind === "VIDEO");
   const busy = Boolean(status) || isPending;
 
-  async function upload(pathname: string, body: Blob, contentType: string) {
+  async function upload(pathname: string, body: Blob, contentType: string, onProgress?: (pct: number) => void) {
     if (mode === "blob") {
       await uploadPresigned(pathname, body, {
         access: "private",
         handleUploadUrl: "/seller/api/upload",
         contentType,
         multipart: body.size > 20 * 1024 * 1024,
+        onUploadProgress: onProgress ? (e) => onProgress(Math.round(e.percentage)) : undefined,
       });
       return;
     }
@@ -73,7 +74,9 @@ export function MediaManager({ goatId, media, mode }: { goatId: string; media: M
     try {
       setStatus("Uploading video… keep this page open.");
       const pathname = `goats/${goatId}/${crypto.randomUUID().slice(0, 8)}.${ext}`;
-      await upload(pathname, file, file.type || "video/mp4");
+      await upload(pathname, file, file.type || "video/mp4", (pct) =>
+        setStatus(`Uploading video… ${pct}% – keep this page open.`),
+      );
       setStatus("Saving…");
       if (video) await removeMedia(video.id);
       await attachMedia(goatId, [{ kind: "VIDEO", pathname, thumbPathname: null }]);
@@ -169,7 +172,9 @@ export function MediaManager({ goatId, media, mode }: { goatId: string; media: M
       <input ref={photoInput} type="file" accept="image/*" multiple hidden onChange={(e) => onPhotos(e.target.files)} />
       <input ref={videoInput} type="file" accept="video/*" hidden onChange={(e) => onVideo(e.target.files)} />
 
-      {status && <p className="rounded-[10px] bg-green-tint px-3 py-2 text-[15px] text-green">{status}</p>}
+      <p role="status" aria-live="polite" className={status ? "rounded-[10px] bg-green-tint px-3 py-2 text-[15px] text-green" : "sr-only"}>
+        {status}
+      </p>
       {error && (
         <p role="alert" className="rounded-[10px] bg-amber-tint px-3 py-2 text-[15px] text-amber-ink">
           {error}
