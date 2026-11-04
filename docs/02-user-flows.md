@@ -29,10 +29,10 @@
    - Email (optional)
    - Consent tick
    - Button: **Pay R X**
-5. Goat is **reserved for 15 minutes**. Timer shows on the page.
+5. Goat is **reserved for 5 minutes**. Timer shows on the page.
 6. **Payfast** page: buyer pays.
 7. **Success page:** big tick, goat photo with SOLD, order number, text: "Payment received. The seller will contact you about collection." Button: **Back to goats**.
-8. **Cancel / fail page:** "Payment not done. Try again." Form data kept. Reservation released after 15 minutes.
+8. **Cancel / fail page:** "Payment not done. Try again." Form data kept. Reservation released after 5 minutes.
 
 ## D. System after payment
 
@@ -55,7 +55,7 @@
 
 | Case | Behaviour |
 |---|---|
-| Two buyers tap Buy on the same goat | First gets 15-minute reservation. Second sees "Someone is buying this goat now. Try again in 15 minutes." |
+| Two buyers tap Buy on the same goat | First gets 5-minute reservation. Second sees "Someone is buying this goat now. Try again in 5 minutes." |
 | Payment succeeds after reservation expired | Server still accepts it if goat is not sold to someone else. If it is, order is flagged for manual refund and seller is emailed. |
 | Buyer closes Payfast page | Reservation expires. Goat is available again. |
 | Seller edits price during reservation | Not allowed while reserved. |

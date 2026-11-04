@@ -147,7 +147,7 @@ export default async function GoatPage({ params }: { params: Promise<{ code: str
         {sold ? (
           <p className="text-center text-lg font-bold text-muted">This goat is sold.</p>
         ) : held ? (
-          <p className="text-center text-lg font-bold text-amber-ink">Someone is buying this goat now. Try again in 15 minutes.</p>
+          <p className="text-center text-lg font-bold text-amber-ink">Someone is buying this goat now. Try again in 5 minutes.</p>
         ) : (
           <>
             <Link

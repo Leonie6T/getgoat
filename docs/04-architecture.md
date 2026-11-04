@@ -52,7 +52,7 @@ OrderItem
 
 1. Buyer submits details (the hold starts here, not on the Buy tap, so browsing never blocks a goat) → server action:
    - `SELECT … FOR UPDATE` the goat.
-   - If `AVAILABLE` (or `RESERVED` with `reservedUntil < now`): set `RESERVED`, `reservedUntil = now + 15 min`.
+   - If `AVAILABLE` (or `RESERVED` with `reservedUntil < now`): set `RESERVED`, `reservedUntil = now + 5 min`.
    - Create `Buyer`, `Order(PENDING)`, `OrderItem`.
    - Else: return "Someone is buying this goat now".
 2. Server builds Payfast form fields (`merchant_id`, `merchant_key`, `return_url`, `cancel_url`, `notify_url`, `m_payment_id = order.id`, `amount`, `item_name`) + MD5 `signature` with passphrase. Browser auto-posts to Payfast.

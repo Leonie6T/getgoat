@@ -122,7 +122,7 @@ export function BuyForm({ code, price }: { code: string; price: string }) {
         {pending ? "Please wait…" : `Pay ${price}`}
       </button>
       <p className="-mt-1 text-center text-[13px] text-muted">
-        Secure payment with Payfast. The goat is held for you for 15 minutes.
+        Secure payment with Payfast. The goat is held for you for 5 minutes.
       </p>
     </form>
   );

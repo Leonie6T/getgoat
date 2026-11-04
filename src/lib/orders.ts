@@ -1,7 +1,7 @@
 import "server-only";
 import { db } from "./db";
 
-export const HOLD_MINUTES = 15;
+export const HOLD_MINUTES = 5;
 
 /**
  * Atomically holds a goat for one order. Succeeds when the goat is available,
