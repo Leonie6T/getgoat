@@ -83,7 +83,7 @@ export async function startCheckout(goatCode: string, _prev: BuyState, formData:
   const okCell = await withinLimit(`hold:cell:${v.cellphone}`, 3, 3600);
   const okIp = await withinLimit(`hold:ip:${await clientIp()}`, 6, 3600);
   if (!okCell || !okIp) {
-    return { error: "Too many tries. Please call Brofour Farming on 083 442 6012 to buy this goat." };
+    return { error: "Too many tries. Please WhatsApp Brofour Farming to buy this goat." };
   }
 
   const goat = await db.goat.findUnique({ where: { code: goatCode } });

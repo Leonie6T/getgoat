@@ -4,7 +4,7 @@ import { Logo } from "@/components/Logo";
 import { db } from "@/lib/db";
 import { MARK_LABEL, formatRand, goatTitle } from "@/lib/goats";
 import { orderNumber } from "@/lib/payfast";
-import { SELLER_NAME, SELLER_PHONE, SELLER_PHONE_TEL } from "@/lib/site";
+import { COLLECTION_POINT, SELLER_NAME, SELLER_PHONE, collectionFrom, formatDay, sellerWhatsApp } from "@/lib/site";
 import { PrintButton } from "./PrintButton";
 
 export const dynamic = "force-dynamic";
@@ -54,17 +54,21 @@ export default async function ReceiptPage({ params }: { params: Promise<{ id: st
         )}
         {row("Amount paid", formatRand(order.totalCents))}
         {row("Paid with", order.payfastPaymentId ? `Payfast · ref ${order.payfastPaymentId}` : "Payfast")}
-        {order.collectedAt && row("Collected", date(order.collectedAt))}
+        {row("Collection point", COLLECTION_POINT)}
+        {order.collectedAt
+          ? row("Collected", date(order.collectedAt))
+          : row("Available from", formatDay(collectionFrom(order.paidAt!)))}
       </section>
       <section className="rounded-xl bg-ground p-3 text-[15px]">
         <p>
           <strong>Seller:</strong> {SELLER_NAME}
         </p>
         <p>
-          <strong>Contact:</strong> <a href={`tel:${SELLER_PHONE_TEL}`}>{SELLER_PHONE}</a>
+          <strong>WhatsApp:</strong> <a href={sellerWhatsApp(`Hi, about my order ${orderNumber(order.number)}.`)}>{SELLER_PHONE}</a>
         </p>
         <p className="mt-1 text-[13px] text-muted">
-          Bring this receipt when you collect. The stock removal document is signed at collection.
+          Bring this receipt and your ID when you collect. The stock removal document is signed at collection.{" "}
+          <a href="/terms">Terms</a>
         </p>
       </section>
       <PrintButton />

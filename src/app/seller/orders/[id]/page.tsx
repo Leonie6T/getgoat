@@ -8,7 +8,7 @@ import { db } from "@/lib/db";
 import { formatRand, goatTitle, mediaUrl } from "@/lib/goats";
 import { STATUS_BADGE } from "@/lib/order-status";
 import { orderNumber } from "@/lib/payfast";
-import { siteUrl } from "@/lib/site";
+import { COLLECTION_POINT, collectionFrom, formatDay, siteUrl } from "@/lib/site";
 import { cellphoneToWa } from "@/lib/validate";
 import { markCollected, markRefunded, undoCollected } from "../actions";
 
@@ -31,7 +31,7 @@ export default async function OrderDetail({ params }: { params: Promise<{ id: st
   const receiptUrl = `${await siteUrl()}/receipt/${order.id}`;
   const paidOrDone = order.status === "PAID" || order.status === "COLLECTED";
   const waText = paidOrDone
-    ? `Hi ${order.buyer.fullName.split(" ")[0]}, this is Brofour Farming. Thank you for buying ${goatTitle(goat)} (${goat.idMarkValue}), order ${orderNumber(order.number)}.\n\nYour receipt: ${receiptUrl}\n\nWhen can you collect?`
+    ? `Hi ${order.buyer.fullName.split(" ")[0]}, this is Brofour Farming. Thank you for buying ${goatTitle(goat)} (${goat.idMarkValue}), order ${orderNumber(order.number)}.\n\nYour receipt: ${receiptUrl}\n\nCollect at ${COLLECTION_POINT}, from ${formatDay(collectionFrom(order.paidAt ?? order.createdAt))}. Please bring your ID. When can you come?`
     : `Hi ${order.buyer.fullName.split(" ")[0]}, this is Brofour Farming about order ${orderNumber(order.number)}.`;
   const paid = order.status === "PAID" || order.status === "COLLECTED";
 

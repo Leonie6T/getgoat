@@ -11,7 +11,28 @@ export async function siteUrl() {
 }
 
 export const SELLER_NAME = "Brofour Farming";
+/** Shown to buyers only after they have paid (owner: avoid calls). */
 export const SELLER_PHONE = "083 442 6012";
 export const SELLER_PHONE_TEL = "+27834426012";
 
 export const APP_NAME = "Online Goat Market";
+
+/** Every goat is collected here. */
+export const COLLECTION_POINT = "Glen Victor Meats & Abattoir, 20 Nahoon Dam Road";
+
+/** WhatsApp chat with the seller, with an optional ready message. */
+export function sellerWhatsApp(text?: string) {
+  return `https://wa.me/${SELLER_PHONE_TEL.replace("+", "")}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
+}
+
+/** First collection day: the day after payment (South African date). */
+export function collectionFrom(paidAt: Date) {
+  const sast = new Date(paidAt.getTime() + 2 * 3600 * 1000);
+  sast.setUTCHours(12, 0, 0, 0);
+  sast.setUTCDate(sast.getUTCDate() + 1);
+  return sast;
+}
+
+export function formatDay(d: Date) {
+  return d.toLocaleDateString("en-ZA", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "Africa/Johannesburg" });
+}

@@ -35,9 +35,9 @@ export function GoatForm({ goat }: { goat?: GoatValues }) {
         </Field>
         <Field label="Sex" error={err.sex}>
           <select name="sex" value={sex} onChange={(e) => setSex(e.target.value as typeof sex)} className={inputClass}>
-            <option value="BUCK">Buck</option>
-            <option value="DOE">Doe</option>
-            <option value="WETHER">Wether</option>
+            <option value="BUCK">Male</option>
+            <option value="DOE">Female</option>
+            <option value="WETHER">Kapater</option>
           </select>
         </Field>
         <Field label="Age (months)" error={err.ageMonths}>
@@ -76,7 +76,7 @@ export function GoatForm({ goat }: { goat?: GoatValues }) {
 
       {sex === "DOE" && (
         <fieldset className="grid grid-cols-2 gap-2.5 rounded-xl border border-line bg-green-tint/50 p-3">
-          <legend className="px-1 text-[13px] font-bold text-green">Doe only</legend>
+          <legend className="px-1 text-[13px] font-bold text-green">Female only</legend>
           <Field label="Pregnant?">
             <select
               name="pregnant"
@@ -118,7 +118,7 @@ export function GoatForm({ goat }: { goat?: GoatValues }) {
       )}
 
       <Field label="Notes (optional)" error={err.notes}>
-        <input name="notes" defaultValue={goat?.notes ?? ""} placeholder="Good breeding doe" className={inputClass} />
+        <input name="notes" defaultValue={goat?.notes ?? ""} placeholder="Good breeding female" className={inputClass} />
       </Field>
 
       {state.error && (

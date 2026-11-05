@@ -4,8 +4,9 @@ import { GoatCard } from "@/components/GoatCard";
 import { APP_NAME, Logo } from "@/components/Logo";
 import { TopBar } from "@/components/TopBar";
 import { db } from "@/lib/db";
-import { ageLabel, buyerStatus, formatRand, mediaUrl } from "@/lib/goats";
-import { SELLER_NAME, SELLER_PHONE, SELLER_PHONE_TEL, siteUrl } from "@/lib/site";
+import { SEX_LABEL, ageLabel, buyerStatus, formatRand, mediaUrl } from "@/lib/goats";
+import { SiteFooter } from "@/components/SiteFooter";
+import { SELLER_NAME, sellerWhatsApp, siteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -47,8 +48,8 @@ export default async function GoatsPage({ searchParams }: { searchParams: Promis
 
   const filters = [
     { label: "All", value: undefined },
-    { label: "Does", value: "DOE" },
-    { label: "Bucks", value: "BUCK" },
+    { label: "Female", value: "DOE" },
+    { label: "Male", value: "BUCK" },
   ];
 
   return (
@@ -56,8 +57,11 @@ export default async function GoatsPage({ searchParams }: { searchParams: Promis
       <TopBar
         title={<Logo />}
         right={
-          <a href={`tel:${SELLER_PHONE_TEL}`} className="flex min-h-11 items-center text-[14px] font-semibold">
-            {SELLER_PHONE}
+          <a
+            href={sellerWhatsApp("Hi, I saw your goats on Online Goat Market.")}
+            className="flex min-h-11 items-center rounded-lg bg-[#25a244] px-3 text-[14px] font-bold text-white no-underline"
+          >
+            WhatsApp us
           </a>
         }
       />
@@ -95,7 +99,7 @@ export default async function GoatsPage({ searchParams }: { searchParams: Promis
                   href={`/g/${g.code}`}
                   photo={photo ? mediaUrl(photo.thumbPathname ?? photo.pathname) : null}
                   price={formatRand(g.priceCents)}
-                  meta={[g.breed, g.sex === "DOE" ? "Doe" : g.sex === "BUCK" ? "Buck" : "Wether", age].filter(Boolean).join(" · ")}
+                  meta={[g.breed, SEX_LABEL[g.sex], age].filter(Boolean).join(" · ")}
                   sold={buyerStatus(g) === "SOLD"}
                   pregnant={g.pregnant === "YES"}
                 />
@@ -104,14 +108,7 @@ export default async function GoatsPage({ searchParams }: { searchParams: Promis
           </div>
         )}
       </main>
-      <footer className="flex items-center justify-between border-t border-line px-4 py-3 text-sm text-muted">
-        <span className="flex items-center gap-1.5">
-          Sold by {SELLER_NAME}
-        </span>
-        <Link href="/seller" className="text-muted">
-          Seller login
-        </Link>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

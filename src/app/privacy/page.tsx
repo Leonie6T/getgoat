@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { TopBar } from "@/components/TopBar";
-import { SELLER_NAME, SELLER_PHONE } from "@/lib/site";
+import { SiteFooter } from "@/components/SiteFooter";
+import { SELLER_NAME, sellerWhatsApp } from "@/lib/site";
 
 export const metadata: Metadata = { title: "Privacy" };
 
@@ -26,9 +27,11 @@ export default function PrivacyPage() {
           delete them.
         </p>
         <p>
-          <strong>Your rights (POPIA):</strong> you can ask to see, correct or delete your details. Call {SELLER_PHONE}.
+          <strong>Your rights (POPIA):</strong> you can ask to see, correct or delete your details.{" "}
+          <a href={sellerWhatsApp("Hi, I have a privacy request.")}>WhatsApp us</a>.
         </p>
       </main>
+      <SiteFooter />
     </div>
   );
 }
