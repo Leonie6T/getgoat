@@ -4,7 +4,7 @@ import { Logo } from "@/components/Logo";
 import { db } from "@/lib/db";
 import { MARK_LABEL, formatRand, goatTitle } from "@/lib/goats";
 import { orderNumber } from "@/lib/payfast";
-import { COLLECTION_POINT, SELLER_NAME, SELLER_PHONE, collectionFrom, formatDay, sellerWhatsApp } from "@/lib/site";
+import { COLLECTION_POINT, SELLER_NAME, SELLER_PHONE, collectionDeadline, collectionFrom, formatDay, sellerWhatsApp } from "@/lib/site";
 import { PrintButton } from "./PrintButton";
 
 export const dynamic = "force-dynamic";
@@ -57,7 +57,12 @@ export default async function ReceiptPage({ params }: { params: Promise<{ id: st
         {row("Collection point", COLLECTION_POINT)}
         {order.collectedAt
           ? row("Collected", date(order.collectedAt))
-          : row("Available from", formatDay(collectionFrom(order.paidAt!)))}
+          : (
+            <>
+              {row("Available from", formatDay(collectionFrom(order.paidAt!)))}
+              {row("Collect by", formatDay(collectionDeadline(order.paidAt!)))}
+            </>
+          )}
       </section>
       <section className="rounded-xl bg-ground p-3 text-[15px]">
         <p>

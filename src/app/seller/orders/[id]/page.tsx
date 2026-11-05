@@ -8,7 +8,7 @@ import { db } from "@/lib/db";
 import { formatRand, goatTitle, mediaUrl } from "@/lib/goats";
 import { STATUS_BADGE } from "@/lib/order-status";
 import { orderNumber } from "@/lib/payfast";
-import { COLLECTION_POINT, collectionFrom, formatDay, siteUrl } from "@/lib/site";
+import { COLLECTION_POINT, collectionDeadline, collectionFrom, formatDay, siteUrl } from "@/lib/site";
 import { cellphoneToWa } from "@/lib/validate";
 import { cancelUnpaid, confirmPayment, markCollected, markRefunded, undoCollected } from "../actions";
 
@@ -49,7 +49,7 @@ export default async function OrderDetail({
           : `Please pay cash at collection at ${COLLECTION_POINT}. Details: ${orderUrl}`
       }`
     : paidOrDone
-    ? `Hi ${order.buyer.fullName.split(" ")[0]}, this is Brofour Farming. Thank you for buying ${goatTitle(goat)} (${goat.idMarkValue}), order ${orderNumber(order.number)}.\n\nYour receipt: ${receiptUrl}\n\nCollect at ${COLLECTION_POINT}, from ${formatDay(collectionFrom(order.paidAt ?? order.createdAt))}. Please show this receipt when you collect. When can you come?`
+    ? `Hi ${order.buyer.fullName.split(" ")[0]}, this is Brofour Farming. Thank you for buying ${goatTitle(goat)} (${goat.idMarkValue}), order ${orderNumber(order.number)}.\n\nYour receipt: ${receiptUrl}\n\nCollect at ${COLLECTION_POINT}, from ${formatDay(collectionFrom(order.paidAt ?? order.createdAt))} to ${formatDay(collectionDeadline(order.paidAt ?? order.createdAt))}. Please show this receipt when you collect. When can you come?`
     : `Hi ${order.buyer.fullName.split(" ")[0]}, this is Brofour Farming about order ${orderNumber(order.number)}.`;
   const paid = order.status === "PAID" || order.status === "COLLECTED";
 
