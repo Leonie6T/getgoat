@@ -111,3 +111,10 @@ Secrets live only in Vercel project settings and a local `.env.local` (git-ignor
 ## 7. Visual design
 
 "Veld" theme (sand / thornveld green / acacia red / ochre; Bricolage Grotesque + Figtree): https://claude.ai/artifact/VPKyQBQfdeXXP9skejdCMX
+
+## 8. Hardening (slice 7)
+
+- **Rate limits** (DB-backed, `RateLimit`): seller login 8 tries per device and 40 overall per 15 min (reset on success); checkout holds 3 per cellphone and 6 per device per hour.
+- **Security headers**: CSP (`frame-ancestors 'none'`, `object-src 'none'`, `base-uri 'self'`, `form-action` self + Payfast), X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy, HSTS; seller pages and receipts `no-store`.
+- **Daily job** `/api/cron/cleanup` (vercel.json, 01:15 UTC): expire stale orders, free stale holds, POPIA retention (ID numbers, addresses, driver data removed 3 years after the order), prune old notifications and rate-limit rows. Optional `CRON_SECRET`.
+- **Measured on simulated 3G + 4× CPU slowdown**: marketplace 178 KB, content in ~1.6 s; goat page 158 KB, ~1.0 s; checkout 132 KB, ~1.0 s.
