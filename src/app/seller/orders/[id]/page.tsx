@@ -8,6 +8,7 @@ import { db } from "@/lib/db";
 import { formatRand, goatTitle, mediaUrl } from "@/lib/goats";
 import { STATUS_BADGE } from "@/lib/order-status";
 import { orderNumber } from "@/lib/payfast";
+import { siteUrl } from "@/lib/site";
 import { cellphoneToWa } from "@/lib/validate";
 import { markCollected, markRefunded, undoCollected } from "../actions";
 
@@ -27,7 +28,11 @@ export default async function OrderDetail({ params }: { params: Promise<{ id: st
   const photo = goat.media[0];
   const badge = STATUS_BADGE[order.status];
   const idNumber = maskId(await decrypt(order.buyer.idNumberEnc).catch(() => "??????"));
-  const waText = `Hi ${order.buyer.fullName.split(" ")[0]}, this is Brofour Farming about your goat (${goatTitle(goat)}, order ${orderNumber(order.number)}). When can you collect?`;
+  const receiptUrl = `${await siteUrl()}/receipt/${order.id}`;
+  const paidOrDone = order.status === "PAID" || order.status === "COLLECTED";
+  const waText = paidOrDone
+    ? `Hi ${order.buyer.fullName.split(" ")[0]}, this is Brofour Farming. Thank you for buying ${goatTitle(goat)} (${goat.idMarkValue}), order ${orderNumber(order.number)}.\n\nYour receipt: ${receiptUrl}\n\nWhen can you collect?`
+    : `Hi ${order.buyer.fullName.split(" ")[0]}, this is Brofour Farming about order ${orderNumber(order.number)}.`;
   const paid = order.status === "PAID" || order.status === "COLLECTED";
 
   const row = (label: string, value: React.ReactNode) => (
@@ -93,7 +98,7 @@ export default async function OrderDetail({ params }: { params: Promise<{ id: st
             href={`https://wa.me/${cellphoneToWa(order.buyer.cellphone)}?text=${encodeURIComponent(waText)}`}
             className="flex min-h-12 items-center justify-center gap-1.5 rounded-xl bg-[#25a244] font-bold text-white no-underline"
           >
-            <IconChat className="size-5" /> WhatsApp buyer
+            <IconChat className="size-5" /> {paidOrDone ? "Send receipt" : "WhatsApp buyer"}
           </a>
           <a
             href={`tel:${order.buyer.cellphone.replace(/\s/g, "")}`}

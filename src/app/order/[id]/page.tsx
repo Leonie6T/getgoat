@@ -48,7 +48,8 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
         )}
         {summary}
         <p className="text-[17px]">{SELLER_NAME} will contact you on your cellphone about collection.</p>
-        <p className="text-[13px] text-muted">Take a screenshot of this page.</p>
+        <p className="text-[13px] text-muted">{SELLER_NAME} will also send your receipt link on WhatsApp.</p>
+        <Link href={`/receipt/${order.id}`} className={`${button} bg-green text-white`}>View receipt</Link>
         <Link href="/goats" className={`${button} mt-auto border-2 border-ink text-ink`}>See more goats</Link>
       </main>
     );
