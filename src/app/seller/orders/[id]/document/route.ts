@@ -18,13 +18,13 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     buyer: {
       fullName: order.buyer.fullName,
       idLabel: order.buyer.idType === "PASSPORT" ? "Passport number" : "ID number",
-      idNumber: await decrypt(order.buyer.idNumberEnc),
+      idNumber: await decrypt(order.buyer.idNumberEnc).catch(() => "Removed (POPIA retention)"),
       address: order.buyer.address,
       cellphone: order.buyer.cellphone,
     },
     remover:
       order.driverName && order.driverIdNumberEnc
-        ? { name: order.driverName, idNumber: await decrypt(order.driverIdNumberEnc) }
+        ? { name: order.driverName, idNumber: await decrypt(order.driverIdNumberEnc).catch(() => "Removed") }
         : null,
     vehicleReg: order.vehicleReg,
     goats: order.items.map((i) => i.goat),

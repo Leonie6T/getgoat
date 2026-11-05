@@ -5,6 +5,7 @@ import { z } from "zod";
 import { encrypt } from "@/lib/crypto";
 import { db } from "@/lib/db";
 import { HOLD_MINUTES, holdGoat } from "@/lib/orders";
+import { clientIp, withinLimit } from "@/lib/rate-limit";
 import { isValidPassport, isValidSaId, normaliseCellphone } from "@/lib/validate";
 
 export type BuyState = {
@@ -77,6 +78,13 @@ function validate(form: FormData): { data?: Checkout; fieldErrors: Record<string
 export async function startCheckout(goatCode: string, _prev: BuyState, formData: FormData): Promise<BuyState> {
   const { data: v, fieldErrors } = validate(formData);
   if (!v) return { error: "Please check the marked fields.", fieldErrors };
+
+  // Stop fake holds that block goats: 3 per cellphone and 6 per device per hour.
+  const okCell = await withinLimit(`hold:cell:${v.cellphone}`, 3, 3600);
+  const okIp = await withinLimit(`hold:ip:${await clientIp()}`, 6, 3600);
+  if (!okCell || !okIp) {
+    return { error: "Too many tries. Please call Brofour Farming on 083 442 6012 to buy this goat." };
+  }
 
   const goat = await db.goat.findUnique({ where: { code: goatCode } });
   if (!goat || goat.status === "HIDDEN") return { error: "This goat is no longer listed." };
