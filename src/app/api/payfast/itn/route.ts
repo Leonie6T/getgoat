@@ -1,4 +1,6 @@
 import { db } from "@/lib/db";
+import { sendSaleEmail } from "@/lib/email";
+import { siteUrl } from "@/lib/site";
 import { markOrderPaid, releaseOrder } from "@/lib/orders";
 import { confirmWithPayfast, isPayfastIp, itnSignatureOk, payfastConfig } from "@/lib/payfast";
 
@@ -48,9 +50,25 @@ export async function POST(request: Request) {
   if (data.payment_status === "COMPLETE") {
     const outcome = await markOrderPaid(order.id, data.pf_payment_id ?? "");
     console.info("ITN complete", order.id, outcome.result);
-    // Seller email notification: slice 5.
+    if (outcome.result === "paid" || outcome.result === "refund-needed") {
+      // Notify once; an email problem must not fail the payment notification.
+      await notifySeller(order.id, outcome.result === "refund-needed").catch((e) => console.error("Sale email failed", e));
+    }
   } else if (data.payment_status === "CANCELLED") {
     await releaseOrder(order.id, "CANCELLED");
   }
   return new Response("OK");
+}
+
+async function notifySeller(orderId: string, refundNeeded: boolean) {
+  const order = await db.order.findUniqueOrThrow({ where: { id: orderId }, include: { buyer: true, items: { include: { goat: true } } } });
+  await sendSaleEmail({
+    orderId: order.id,
+    number: order.number,
+    totalCents: order.totalCents,
+    refundNeeded,
+    buyer: order.buyer,
+    goat: order.items[0].goat,
+    origin: await siteUrl(),
+  });
 }

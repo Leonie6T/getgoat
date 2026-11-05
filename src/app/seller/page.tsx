@@ -33,10 +33,10 @@ export default async function SellerHome() {
       />
       <main>
         <div className="grid grid-cols-2 gap-2 p-4">
-          <div className="rounded-xl border border-[#e3c98f] bg-amber-tint p-3">
+          <Link href="/seller/orders" className="rounded-xl border border-[#e3c98f] bg-amber-tint p-3 text-ink no-underline">
             <div className="text-[28px] font-extrabold">{toRelease}</div>
-            <div className="text-sm">Paid – to release</div>
-          </div>
+            <div className="text-sm">Paid – to release ›</div>
+          </Link>
           <div className="rounded-xl border border-line bg-card p-3">
             <div className="text-[28px] font-extrabold">{forSale}</div>
             <div className="text-sm">Goats for sale</div>
@@ -48,9 +48,10 @@ export default async function SellerHome() {
             label="Share all goats on WhatsApp"
             className="min-h-[52px] rounded-xl text-[17px]"
           />
-          <Link href="/goats" className="text-center text-sm font-semibold">
-            View marketplace
-          </Link>
+          <div className="flex justify-center gap-6 text-sm font-semibold">
+            <Link href="/seller/orders?tab=all">All orders</Link>
+            <Link href="/goats">View marketplace</Link>
+          </div>
         </div>
         <div className="flex items-center justify-between px-4 pb-2">
           <h1 className="text-lg font-bold">My goats</h1>
