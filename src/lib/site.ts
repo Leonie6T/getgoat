@@ -14,6 +14,4 @@ export const SELLER_NAME = "Brofour Farming";
 export const SELLER_PHONE = "083 442 6012";
 export const SELLER_PHONE_TEL = "+27834426012";
 
-/** Where sale notifications go. Override with SELLER_NOTIFY_EMAIL. */
-export const SELLER_NOTIFY_EMAIL = process.env.SELLER_NOTIFY_EMAIL || "leonie.stone@gmail.com";
 export const APP_NAME = "Online Goat Market";

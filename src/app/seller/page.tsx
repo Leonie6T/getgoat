@@ -1,22 +1,26 @@
 import Link from "next/link";
+import { Bell } from "@/components/Bell";
 import { Logo } from "@/components/Logo";
 import { ShareLink } from "@/components/ShareButton";
 import { TopBar } from "@/components/TopBar";
 import { db } from "@/lib/db";
 import { STATUS_LABEL, buyerStatus, formatRand, goatTitle } from "@/lib/goats";
+import { unreadCount } from "@/lib/notify";
 import { siteUrl } from "@/lib/site";
+import { PhoneAlerts } from "./PhoneAlerts";
 import { logout } from "./login/actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function SellerHome() {
-  const [goats, origin] = await Promise.all([
+  const [goats, origin, unread] = await Promise.all([
     db.goat.findMany({
       where: { status: { not: "COLLECTED" } },
       orderBy: { createdAt: "desc" },
       include: { media: { where: { kind: "PHOTO" }, orderBy: { sortOrder: "asc" }, take: 1 } },
     }),
     siteUrl(),
+    unreadCount(),
   ]);
   const forSale = goats.filter((g) => buyerStatus(g) === "AVAILABLE").length;
   const toRelease = goats.filter((g) => g.status === "SOLD").length;
@@ -26,9 +30,12 @@ export default async function SellerHome() {
       <TopBar
         title={<Logo size={36} />}
         right={
-          <form action={logout}>
-            <button className="min-h-11 px-1 text-sm text-muted">Log out</button>
-          </form>
+          <div className="flex items-center gap-1">
+            <Bell unread={unread} />
+            <form action={logout}>
+              <button className="min-h-11 px-1 text-sm text-muted">Log out</button>
+            </form>
+          </div>
         }
       />
       <main>
@@ -42,6 +49,7 @@ export default async function SellerHome() {
             <div className="text-sm">Goats for sale</div>
           </div>
         </div>
+        <PhoneAlerts />
         <div className="flex flex-col gap-2 px-4 pb-4">
           <ShareLink
             text={`Goats for sale from Brofour Farming:\n${origin}/goats`}

@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
-import { sendSaleEmail } from "@/lib/email";
-import { siteUrl } from "@/lib/site";
+import { formatRand, goatTitle } from "@/lib/goats";
+import { notifySeller } from "@/lib/notify";
+import { orderNumber } from "@/lib/payfast";
 import { markOrderPaid, releaseOrder } from "@/lib/orders";
 import { confirmWithPayfast, isPayfastIp, itnSignatureOk, payfastConfig } from "@/lib/payfast";
 
@@ -51,8 +52,8 @@ export async function POST(request: Request) {
     const outcome = await markOrderPaid(order.id, data.pf_payment_id ?? "");
     console.info("ITN complete", order.id, outcome.result);
     if (outcome.result === "paid" || outcome.result === "refund-needed") {
-      // Notify once; an email problem must not fail the payment notification.
-      await notifySeller(order.id, outcome.result === "refund-needed").catch((e) => console.error("Sale email failed", e));
+      // Notify once; a notification problem must not fail the payment notification.
+      await notifySale(order.id, outcome.result === "refund-needed").catch((e) => console.error("Seller notification failed", e));
     }
   } else if (data.payment_status === "CANCELLED") {
     await releaseOrder(order.id, "CANCELLED");
@@ -60,15 +61,23 @@ export async function POST(request: Request) {
   return new Response("OK");
 }
 
-async function notifySeller(orderId: string, refundNeeded: boolean) {
+async function notifySale(orderId: string, refundNeeded: boolean) {
   const order = await db.order.findUniqueOrThrow({ where: { id: orderId }, include: { buyer: true, items: { include: { goat: true } } } });
-  await sendSaleEmail({
-    orderId: order.id,
-    number: order.number,
-    totalCents: order.totalCents,
-    refundNeeded,
-    buyer: order.buyer,
-    goat: order.items[0].goat,
-    origin: await siteUrl(),
-  });
+  const goat = order.items[0].goat;
+  const what = `${goatTitle(goat)} ${goat.idMarkValue} – ${formatRand(order.totalCents)}`;
+  await notifySeller(
+    refundNeeded
+      ? {
+          kind: "REFUND_NEEDED",
+          title: `Refund needed: ${orderNumber(order.number)}`,
+          body: `${order.buyer.fullName} paid for ${what}, but it was already sold. Refund in Payfast.`,
+          url: `/seller/orders/${order.id}`,
+        }
+      : {
+          kind: "SALE",
+          title: `Sold: ${what}`,
+          body: `${order.buyer.fullName} paid. Tap to send the receipt and arrange collection.`,
+          url: `/seller/orders/${order.id}`,
+        },
+  );
 }
