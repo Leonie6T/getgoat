@@ -4,10 +4,11 @@ import { notFound } from "next/navigation";
 import { cache } from "react";
 import { SoldStamp } from "@/components/GoatCard";
 import { TopBar } from "@/components/TopBar";
-import { IconAge, IconBaby, IconChat, IconColour, IconFemale, IconPhone, IconSex, IconWeight } from "@/components/icons";
+import { SiteFooter } from "@/components/SiteFooter";
+import { IconAge, IconBaby, IconChat, IconColour, IconFemale, IconSex, IconWeight } from "@/components/icons";
 import { db } from "@/lib/db";
 import { MARK_LABEL, PREGNANT_LABEL, SEX_LABEL, ageLabel, buyerStatus, formatRand, goatTitle, mediaUrl } from "@/lib/goats";
-import { SELLER_PHONE, SELLER_PHONE_TEL, siteUrl } from "@/lib/site";
+import { COLLECTION_POINT, sellerWhatsApp, siteUrl } from "@/lib/site";
 import { Gallery } from "./Gallery";
 
 export const dynamic = "force-dynamic";
@@ -64,7 +65,6 @@ export default async function GoatPage({ params }: { params: Promise<{ code: str
     { label: "Weight", value: goat.weightKg ? `${goat.weightKg} kg` : null, Icon: IconWeight },
     { label: "Colour", value: goat.colour, Icon: IconColour },
   ].filter((f): f is { label: string; value: string; Icon: typeof IconSex } => Boolean(f.value));
-  const chatUrl = (text: string) => `https://wa.me/${SELLER_PHONE_TEL.replace("+", "")}?text=${encodeURIComponent(text)}`;
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-md flex-col">
@@ -127,21 +127,17 @@ export default async function GoatPage({ params }: { params: Promise<{ code: str
           )}
         </div>
         {goat.notes && <p className="text-[15px]">{goat.notes}</p>}
-        <div className="mt-4 grid grid-cols-2 gap-2">
-          <a
-            href={chatUrl(`Hi, I have a question about ${goatTitle(goat)} (tag ${goat.idMarkValue}). ${link}`)}
-            className="flex min-h-12 items-center justify-center gap-1.5 rounded-lg border border-line bg-card font-semibold no-underline"
-          >
-            <IconChat className="size-5" /> Ask a question
-          </a>
-          <a
-            href={`tel:${SELLER_PHONE_TEL}`}
-            className="flex min-h-12 items-center justify-center gap-1.5 rounded-lg border border-line bg-card font-semibold no-underline"
-            aria-label={`Call ${SELLER_PHONE}`}
-          >
-            <IconPhone className="size-5" /> Call
-          </a>
+        <div className="mt-4 rounded-[10px] border border-line bg-card p-3 text-[15px]">
+          <div className="font-bold">Collection</div>
+          <div>{COLLECTION_POINT}</div>
+          <div className="text-muted">From the day after you pay.</div>
         </div>
+        <a
+          href={sellerWhatsApp(`Hi, I have a question about ${goatTitle(goat)} (tag ${goat.idMarkValue}). ${link}`)}
+          className="mt-3 flex min-h-12 items-center justify-center gap-1.5 rounded-lg border border-line bg-card font-semibold no-underline"
+        >
+          <IconChat className="size-5" /> Ask on WhatsApp
+        </a>
       </main>
 
       <div className="sticky bottom-0 border-t border-line bg-card px-4 pb-3 pt-3">
@@ -161,6 +157,7 @@ export default async function GoatPage({ params }: { params: Promise<{ code: str
           </>
         )}
       </div>
+      <SiteFooter />
     </div>
   );
 }

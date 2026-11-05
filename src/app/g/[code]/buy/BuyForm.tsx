@@ -104,10 +104,15 @@ export function BuyForm({ code, price }: { code: string; price: string }) {
       <label className="flex items-start gap-3 text-[14px]">
         <input type="checkbox" name="consent" className="mt-0.5 size-6 shrink-0 accent-green" aria-invalid={!!err.consent} />
         <span>
-          I agree that Brofour Farming keeps these details for this sale and the stock removal document.{" "}
+          I agree to the{" "}
+          <a href="/terms" target="_blank">
+            Terms
+          </a>{" "}
+          and that Brofour Farming keeps these details for this sale and the stock removal document (
           <a href="/privacy" target="_blank">
             Privacy
           </a>
+          ).
           {err.consent && <span className="block text-[13px] text-[#a3341b]">{err.consent}</span>}
         </span>
       </label>

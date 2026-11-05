@@ -5,7 +5,7 @@ import { SoldStamp } from "@/components/GoatCard";
 import { db } from "@/lib/db";
 import { formatRand, goatTitle, mediaUrl } from "@/lib/goats";
 import { orderNumber } from "@/lib/payfast";
-import { SELLER_NAME, SELLER_PHONE, SELLER_PHONE_TEL } from "@/lib/site";
+import { COLLECTION_POINT, SELLER_NAME, SELLER_PHONE, collectionFrom, formatDay, sellerWhatsApp } from "@/lib/site";
 import { RefreshWhilePending } from "./RefreshWhilePending";
 
 export const dynamic = "force-dynamic";
@@ -47,7 +47,22 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
           </div>
         )}
         {summary}
-        <p className="text-[17px]">{SELLER_NAME} will contact you on your cellphone about collection.</p>
+        <div className="w-full rounded-xl border-2 border-green bg-green-tint p-3.5 text-left text-[16px]">
+          <div className="font-bold">Collect your goat</div>
+          <div>{COLLECTION_POINT}</div>
+          <div className="mt-1">
+            Available from <strong>{formatDay(collectionFrom(order.paidAt ?? order.createdAt))}</strong>
+          </div>
+          <div className="mt-1 text-[14px] text-muted">
+            WhatsApp {SELLER_NAME} on <strong className="text-ink">{SELLER_PHONE}</strong> to agree a time.
+          </div>
+        </div>
+        <a
+          href={sellerWhatsApp(`Hi, I paid for order ${orderNumber(order.number)} (${goatTitle(goat)}, ${goat.idMarkValue}). When can I collect?`)}
+          className={`${button} bg-[#25a244] text-white`}
+        >
+          WhatsApp to arrange collection
+        </a>
         <p className="text-[13px] text-muted">{SELLER_NAME} will also send your receipt link on WhatsApp.</p>
         <Link href={`/receipt/${order.id}`} className={`${button} bg-green text-white`}>View receipt</Link>
         <Link href="/goats" className={`${button} mt-auto border-2 border-ink text-ink`}>See more goats</Link>
@@ -60,8 +75,13 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
       <main className="mx-auto flex min-h-dvh max-w-md flex-col items-center gap-4 px-4 pt-12 text-center">
         <h1 className="text-[24px] font-extrabold">Payment received, but the goat was just sold</h1>
         {summary}
-        <p className="text-[17px]">Someone else paid for this goat moments before you. {SELLER_NAME} will refund you in full.</p>
-        <a href={`tel:${SELLER_PHONE_TEL}`} className={`${button} bg-green text-white`}>Call {SELLER_PHONE}</a>
+        <p className="text-[17px]">
+          Someone else paid for this goat moments before you. {SELLER_NAME} will refund you in full. Refunds take 10 to 15
+          working days.
+        </p>
+        <a href={sellerWhatsApp(`Hi, my order ${orderNumber(order.number)} needs a refund.`)} className={`${button} bg-[#25a244] text-white`}>
+          WhatsApp {SELLER_PHONE}
+        </a>
       </main>
     );
   }

@@ -86,10 +86,11 @@ export function paymentFields(req: PaymentRequest) {
     ["name_last", plain(rest.join(" "), 100)],
     ["email_address", req.buyerEmail ?? ""],
     ["cell_number", req.buyerCell.replace(/\D/g, "")],
-    ["m_payment_id", req.orderId],
+    // Readable merchant reference in Payfast reports, e.g. GG-00007.
+    ["m_payment_id", req.orderNumber],
     ["amount", (req.amountCents / 100).toFixed(2)],
     ["item_name", plain(req.itemName)],
-    ["item_description", plain(`Order ${req.orderNumber}`)],
+    ["item_description", plain(`Order ${req.orderNumber} collect at Glen Victor`)],
   ];
   // The posted values must be exactly the signed values: trim, then drop empty ones.
   const nonEmpty = fields.map(([k, v]) => [k, v.trim()] as [string, string]).filter(([, v]) => v !== "");

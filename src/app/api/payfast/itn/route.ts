@@ -30,7 +30,12 @@ export async function POST(request: Request) {
     }
   }
 
-  const order = await db.order.findUnique({ where: { id: data.m_payment_id ?? "" } });
+  // m_payment_id is the order number (GG-00007); older orders used the order id.
+  const ref = data.m_payment_id ?? "";
+  const byNumber = /^GG-(\d+)$/.exec(ref);
+  const order = byNumber
+    ? await db.order.findUnique({ where: { number: Number(byNumber[1]) } })
+    : await db.order.findUnique({ where: { id: ref } });
   if (!order) {
     console.warn("ITN for unknown order", data.m_payment_id);
     return new Response("OK");

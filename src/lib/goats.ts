@@ -1,6 +1,6 @@
 import type { Goat, GoatMedia } from "@prisma/client";
 
-export const SEX_LABEL = { BUCK: "Buck", DOE: "Doe", WETHER: "Wether" } as const;
+export const SEX_LABEL = { BUCK: "Male", DOE: "Female", WETHER: "Kapater" } as const;
 export const MARK_LABEL = { TATTOO: "Tattoo", BRAND: "Brand", EAR_TAG: "Ear tag" } as const;
 export const PREGNANT_LABEL = { YES: "Yes", NO: "No", UNKNOWN: "Not sure" } as const;
 

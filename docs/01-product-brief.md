@@ -119,3 +119,11 @@ App display only (marketplace header, emails): Brofour Farming · 083 442 6012 �
 - Transactional email (Resend or Postmark).
 
 Volume: 50 or fewer goats a month. Free or low-cost tiers are enough.
+
+## 12. Changes after go-live preparation
+
+- Sex labels: Male, Female, Kapater (stored as BUCK / DOE / WETHER).
+- Collection point fixed: Glen Victor Meats & Abattoir, 20 Nahoon Dam Road. Collection from the day after payment; shown on the goat page, checkout, paid page, receipt and the seller's WhatsApp message.
+- Seller phone number shown only after payment. Before payment buyers use WhatsApp buttons (no Call button).
+- Terms and conditions page (`/terms`), linked in every buyer footer and in the checkout consent. Refunds take 10–15 working days.
+- Payfast merchant reference = order number (GG-00008); item name holds breed, sex and tag.
