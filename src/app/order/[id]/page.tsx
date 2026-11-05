@@ -5,7 +5,7 @@ import { SoldStamp } from "@/components/GoatCard";
 import { db } from "@/lib/db";
 import { formatRand, goatTitle, mediaUrl } from "@/lib/goats";
 import { orderNumber } from "@/lib/payfast";
-import { BANK_DETAILS, COLLECTION_POINT, POP_EMAIL, SELLER_NAME, SELLER_PHONE, collectionFrom, formatDay, sellerWhatsApp } from "@/lib/site";
+import { BANK_DETAILS, COLLECTION_POINT, POP_EMAIL, SELLER_NAME, SELLER_PHONE, collectionDeadline, collectionFrom, formatDay, sellerWhatsApp } from "@/lib/site";
 import { RefreshWhilePending } from "./RefreshWhilePending";
 
 export const dynamic = "force-dynamic";
@@ -52,6 +52,9 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
           <div>{COLLECTION_POINT}</div>
           <div className="mt-1">
             Available from <strong>{formatDay(collectionFrom(order.paidAt ?? order.createdAt))}</strong>
+          </div>
+          <div>
+            Collect by <strong>{formatDay(collectionDeadline(order.paidAt ?? order.createdAt))}</strong>
           </div>
           <div className="mt-1 text-[14px] text-muted">
             WhatsApp {SELLER_NAME} on <strong className="text-ink">{SELLER_PHONE}</strong> to agree a time.
@@ -114,7 +117,8 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
             <h2 className="pb-1 font-bold">Pay {formatRand(order.totalCents)} cash when you collect</h2>
             <p>{COLLECTION_POINT}</p>
             <p className="mt-1">
-              Available from <strong>{formatDay(collectionFrom(order.createdAt))}</strong>. Bring the exact amount.
+              Available from <strong>{formatDay(collectionFrom(order.createdAt))}</strong>. Collect by{" "}
+              <strong>{formatDay(collectionDeadline(order.createdAt))}</strong>. Bring the exact amount.
             </p>
             <p className="mt-1 text-[14px] text-muted">You get your receipt when you have paid.</p>
           </section>

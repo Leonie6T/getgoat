@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { SiteFooter } from "@/components/SiteFooter";
 import { TopBar } from "@/components/TopBar";
 import { HOLD_MINUTES } from "@/lib/orders";
-import { COLLECTION_POINT, SELLER_NAME, sellerWhatsApp } from "@/lib/site";
+import { COLLECTION_DAYS, COLLECTION_POINT, SELLER_NAME, sellerWhatsApp } from "@/lib/site";
 
 export const metadata: Metadata = { title: "Terms and conditions" };
 
-const UPDATED = "6 November 2026";
+const UPDATED = "6 November 2026 (v2)";
 
 function Section({ n, title, children }: { n: number; title: string; children: React.ReactNode }) {
   return (
@@ -70,6 +70,10 @@ export default function TermsPage() {
               All goats are collected at <strong>{COLLECTION_POINT}</strong>.
             </li>
             <li>Collection is possible from the day after you pay. Agree a time with us on WhatsApp.</li>
+            <li>
+              <strong>Collect within {COLLECTION_DAYS} days</strong> after the first collection day. The last day is on
+              your receipt. If you cannot collect in time, WhatsApp us before the last day.
+            </li>
             <li>Show your receipt (on your phone is fine) when you collect. If someone collects for you, give them the receipt link.</li>
             <li>
               You (or your driver) and the seller sign the stock removal document at collection, as the Stock Theft Act
@@ -82,7 +86,7 @@ export default function TermsPage() {
           </ul>
         </Section>
 
-        <Section n={5} title="Cancellations and refunds">
+        <Section n={5} title="No cancellations, refunds">
           <ul className="list-disc pl-5">
             <li>
               <strong>Refunds take 10 to 15 working days</strong> and are paid back through Payfast to the way you paid.
@@ -92,7 +96,10 @@ export default function TermsPage() {
               If the goat becomes ill or dies before collection, we refund you in full or, if you agree, offer another
               goat.
             </li>
-            <li>To cancel a purchase, WhatsApp us before collection.</li>
+            <li>
+              <strong>No cancellations:</strong> once you have paid or placed an EFT or cash order, you cannot cancel
+              the purchase.
+            </li>
             <li>
               This does not limit your rights under the Consumer Protection Act and the Electronic Communications and
               Transactions Act.

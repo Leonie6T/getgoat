@@ -33,6 +33,15 @@ export function collectionFrom(paidAt: Date) {
   return sast;
 }
 
+/** Buyers must collect within this many days after the first collection day. */
+export const COLLECTION_DAYS = 7;
+
+export function collectionDeadline(paidAt: Date) {
+  const d = collectionFrom(paidAt);
+  d.setUTCDate(d.getUTCDate() + COLLECTION_DAYS);
+  return d;
+}
+
 export function formatDay(d: Date) {
   return d.toLocaleDateString("en-ZA", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "Africa/Johannesburg" });
 }
