@@ -46,9 +46,21 @@ export default function TermsPage() {
 
         <Section n={3} title="Price and payment">
           <ul className="list-disc pl-5">
-            <li>Prices are in South African rand. You pay the full price online with Payfast.</li>
-            <li>The goat is held for you for {HOLD_MINUTES} minutes while you pay.</li>
-            <li>The sale is complete only when Payfast confirms your payment. You then get a receipt.</li>
+            <li>Prices are in South African rand. You pay the full price.</li>
+            <li>
+              <strong>Card (Payfast):</strong> the goat is held for {HOLD_MINUTES} minutes while you pay. The sale is
+              complete when Payfast confirms your payment.
+            </li>
+            <li>
+              <strong>EFT:</strong> pay into our FNB account with your order number as reference and email the proof of
+              payment. The goat is reserved for you. The sale is complete when the money is in our account. If we do
+              not receive payment, we may cancel the order.
+            </li>
+            <li>
+              <strong>Cash at collection:</strong> the goat is reserved for you. Pay the full amount in cash when you
+              collect. If you do not collect, we may cancel the order.
+            </li>
+            <li>You get your receipt when your payment is confirmed.</li>
           </ul>
         </Section>
 

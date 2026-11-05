@@ -74,6 +74,7 @@ export default async function EditGoatPage({
             <ConfirmButton
               label="Delete goat"
               confirmLabel="Tap again to delete for good"
+              pendingText="Deleting…"
               className="min-h-12 w-full rounded-xl border border-[#e6b7aa] bg-card font-semibold text-[#a3341b]"
             />
           </form>

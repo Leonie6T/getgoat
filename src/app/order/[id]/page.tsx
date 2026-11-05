@@ -5,7 +5,7 @@ import { SoldStamp } from "@/components/GoatCard";
 import { db } from "@/lib/db";
 import { formatRand, goatTitle, mediaUrl } from "@/lib/goats";
 import { orderNumber } from "@/lib/payfast";
-import { COLLECTION_POINT, SELLER_NAME, SELLER_PHONE, collectionFrom, formatDay, sellerWhatsApp } from "@/lib/site";
+import { BANK_DETAILS, COLLECTION_POINT, POP_EMAIL, SELLER_NAME, SELLER_PHONE, collectionFrom, formatDay, sellerWhatsApp } from "@/lib/site";
 import { RefreshWhilePending } from "./RefreshWhilePending";
 
 export const dynamic = "force-dynamic";
@@ -66,6 +66,66 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
         <p className="text-[13px] text-muted">{SELLER_NAME} will also send your receipt link on WhatsApp.</p>
         <Link href={`/receipt/${order.id}`} className={`${button} bg-green text-white`}>View receipt</Link>
         <Link href="/goats" className={`${button} mt-auto border-2 border-ink text-ink`}>See more goats</Link>
+      </main>
+    );
+  }
+
+  if (order.status === "AWAITING_PAYMENT") {
+    const ref = orderNumber(order.number);
+    const eft = order.paymentMethod === "EFT";
+    return (
+      <main className="mx-auto flex min-h-dvh max-w-md flex-col gap-4 px-4 pb-8 pt-8">
+        <h1 className="text-center text-[26px] font-extrabold">Order placed – {eft ? "pay by EFT" : "pay cash at collection"}</h1>
+        <p className="text-center text-muted">The goat is reserved for you. Nobody else can buy it.</p>
+        {summary}
+        {eft ? (
+          <>
+            <section className="rounded-xl border-2 border-green bg-card p-3.5 text-[16px]">
+              <h2 className="pb-1 font-bold">1. Pay {formatRand(order.totalCents)} into this account</h2>
+              {BANK_DETAILS.map(([k, v]) => (
+                <div key={k} className="flex justify-between gap-3 border-b border-line py-1.5 last:border-0">
+                  <span className="text-muted">{k}</span>
+                  <strong className="text-right">{v}</strong>
+                </div>
+              ))}
+              <div className="mt-2 rounded-lg bg-amber-tint p-2.5 text-amber-ink">
+                Payment reference: <strong className="text-[18px]">{ref}</strong>
+              </div>
+            </section>
+            <section className="rounded-xl border border-line bg-card p-3.5 text-[16px]">
+              <h2 className="pb-1 font-bold">2. Email your proof of payment</h2>
+              <p>
+                Send the proof of payment to <strong>{POP_EMAIL}</strong> with {ref} in the subject.
+              </p>
+              <a
+                href={`mailto:${POP_EMAIL}?subject=${encodeURIComponent(`Proof of payment ${ref}`)}&body=${encodeURIComponent(`Hi, please find attached proof of payment for order ${ref} (${goatTitle(goat)}, ${goat.idMarkValue}, ${formatRand(order.totalCents)}).`)}`}
+                className={`${button} mt-3 bg-green text-white`}
+              >
+                Email proof of payment
+              </a>
+            </section>
+            <p className="text-center text-[15px]">
+              3. When the money is in our account, {SELLER_NAME} sends your receipt on WhatsApp. Collection is at{" "}
+              {COLLECTION_POINT}, from the day after payment is confirmed.
+            </p>
+          </>
+        ) : (
+          <section className="rounded-xl border-2 border-green bg-card p-3.5 text-[16px]">
+            <h2 className="pb-1 font-bold">Pay {formatRand(order.totalCents)} cash when you collect</h2>
+            <p>{COLLECTION_POINT}</p>
+            <p className="mt-1">
+              Available from <strong>{formatDay(collectionFrom(order.createdAt))}</strong>. Bring the exact amount.
+            </p>
+            <p className="mt-1 text-[14px] text-muted">You get your receipt when you have paid.</p>
+          </section>
+        )}
+        <a
+          href={sellerWhatsApp(`Hi, about my order ${ref} (${goatTitle(goat)}, ${goat.idMarkValue}).`)}
+          className={`${button} bg-[#25a244] text-white`}
+        >
+          WhatsApp {SELLER_PHONE}
+        </a>
+        <p className="text-center text-[13px] text-muted">Keep this page. Its link always shows your order.</p>
       </main>
     );
   }

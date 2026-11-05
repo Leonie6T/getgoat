@@ -10,6 +10,7 @@ export const dynamic = "force-dynamic";
 
 const TABS: { key: string; label: string; statuses: OrderStatus[] }[] = [
   { key: "release", label: "To release", statuses: ["PAID", "REFUND_NEEDED"] },
+  { key: "awaiting", label: "Awaiting payment", statuses: ["AWAITING_PAYMENT"] },
   { key: "collected", label: "Collected", statuses: ["COLLECTED"] },
   { key: "all", label: "All paid", statuses: ["PAID", "COLLECTED", "REFUND_NEEDED", "REFUNDED"] },
 ];
@@ -21,10 +22,10 @@ const when = (d: Date) =>
 export default async function OrdersPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
   const { tab: tabKey } = await searchParams;
   const tab = TABS.find((t) => t.key === tabKey) ?? TABS[0];
-  const [orders, counts] = await Promise.all([
+  const [orders, counts, awaitingCount] = await Promise.all([
     db.order.findMany({
       where: { status: { in: tab.statuses } },
-      orderBy: { paidAt: "desc" },
+      orderBy: { createdAt: "desc" },
       include: {
         buyer: true,
         items: { include: { goat: { include: { media: { where: { kind: "PHOTO" }, orderBy: { sortOrder: "asc" }, take: 1 } } } } },
@@ -32,6 +33,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
       take: 100,
     }),
     db.order.count({ where: { status: { in: TABS[0].statuses } } }),
+    db.order.count({ where: { status: "AWAITING_PAYMENT" } }),
   ]);
 
   return (
@@ -49,6 +51,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
           >
             {t.label}
             {t.key === "release" && counts > 0 ? ` (${counts})` : ""}
+            {t.key === "awaiting" && awaitingCount > 0 ? ` (${awaitingCount})` : ""}
           </Link>
         ))}
       </nav>
@@ -73,7 +76,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
                     {goatTitle(goat)} · {goat.idMarkValue}
                   </div>
                   <div className="text-[13px] text-muted">
-                    {orderNumber(o.number)} · {o.paidAt ? when(o.paidAt) : ""}
+                    {orderNumber(o.number)} · {when(o.paidAt ?? o.createdAt)}{o.paymentMethod !== "CARD" ? ` · ${o.paymentMethod === "EFT" ? "EFT" : "Cash"}` : ""}
                   </div>
                 </div>
                 <div className="flex flex-col items-end gap-1">
