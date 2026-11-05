@@ -4,7 +4,10 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { encrypt } from "@/lib/crypto";
 import { db } from "@/lib/db";
-import { HOLD_MINUTES, holdGoat } from "@/lib/orders";
+import { formatRand, goatTitle } from "@/lib/goats";
+import { notifySeller } from "@/lib/notify";
+import { HOLD_MINUTES, hideGoatForOrder, holdGoat } from "@/lib/orders";
+import { orderNumber } from "@/lib/payfast";
 import { clientIp, withinLimit } from "@/lib/rate-limit";
 import { isValidPassport, isValidSaId, normaliseCellphone } from "@/lib/validate";
 
@@ -77,7 +80,10 @@ function validate(form: FormData): { data?: Checkout; fieldErrors: Record<string
 
 export async function startCheckout(goatCode: string, _prev: BuyState, formData: FormData): Promise<BuyState> {
   const { data: v, fieldErrors } = validate(formData);
-  if (!v) return { error: "Please check the marked fields.", fieldErrors };
+  const rawMethod = String(formData.get("paymentMethod") ?? "");
+  const method = rawMethod === "CARD" || rawMethod === "EFT" || rawMethod === "CASH" ? rawMethod : null;
+  if (!method) fieldErrors.paymentMethod = "Choose how you want to pay";
+  if (!v || !method) return { error: "Please check the marked fields.", fieldErrors };
 
   // Stop fake holds that block goats: 3 per cellphone and 6 per device per hour.
   const okCell = await withinLimit(`hold:cell:${v.cellphone}`, 3, 3600);
@@ -93,6 +99,8 @@ export async function startCheckout(goatCode: string, _prev: BuyState, formData:
   const order = await db.order.create({
     data: {
       totalCents: goat.priceCents,
+      paymentMethod: method,
+      status: method === "CARD" ? "PENDING" : "AWAITING_PAYMENT",
       consentAt: new Date(),
       expiresAt,
       driverName: v.driverName,
@@ -111,6 +119,21 @@ export async function startCheckout(goatCode: string, _prev: BuyState, formData:
       items: { create: { goatId: goat.id, priceCents: goat.priceCents } },
     },
   });
+
+  if (method !== "CARD") {
+    if (!(await hideGoatForOrder(goat.id, order.id))) {
+      await db.order.update({ where: { id: order.id }, data: { status: "CANCELLED" } });
+      return { error: "Sorry, this goat is no longer available." };
+    }
+    const label = method === "EFT" ? "EFT" : "cash at collection";
+    await notifySeller({
+      kind: "AWAITING_PAYMENT",
+      title: `New order (${label}): ${goatTitle(goat)} ${goat.idMarkValue} – ${formatRand(goat.priceCents)}`,
+      body: `${v.fullName}, ${orderNumber(order.number)}. Goat is hidden. Tap Mark as paid when the money is in.`,
+      url: `/seller/orders/${order.id}`,
+    }).catch((e) => console.error("Seller notification failed", e));
+    redirect(`/order/${order.id}`);
+  }
 
   if (!(await holdGoat(goat.id, order.id, expiresAt))) {
     await db.order.update({ where: { id: order.id }, data: { status: "CANCELLED" } });

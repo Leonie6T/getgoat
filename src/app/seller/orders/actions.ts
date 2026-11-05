@@ -1,7 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
+import { cancelAwaitingOrder, markPaidByHand } from "@/lib/orders";
 import { requireSeller } from "@/lib/session";
 
 /** Buyer collected the goat: close the order and the goat. */
@@ -40,4 +42,24 @@ function revalidateOrders(orderId: string) {
   revalidatePath("/seller/orders");
   revalidatePath(`/seller/orders/${orderId}`);
   revalidatePath("/goats");
+}
+
+/** EFT money is in the bank, or cash was paid at collection. */
+export async function confirmPayment(orderId: string) {
+  await requireSeller();
+  let error: string | null = null;
+  try {
+    await markPaidByHand(orderId);
+  } catch (e) {
+    error = (e as Error).message;
+  }
+  revalidateOrders(orderId);
+  if (error) redirect(`/seller/orders/${orderId}?error=${encodeURIComponent(error)}`);
+}
+
+/** Buyer did not pay: cancel. The goat stays hidden until the seller shows it again. */
+export async function cancelUnpaid(orderId: string) {
+  await requireSeller();
+  await cancelAwaitingOrder(orderId);
+  revalidateOrders(orderId);
 }

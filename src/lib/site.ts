@@ -36,3 +36,13 @@ export function collectionFrom(paidAt: Date) {
 export function formatDay(d: Date) {
   return d.toLocaleDateString("en-ZA", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "Africa/Johannesburg" });
 }
+
+/** EFT payments (from the FNB account confirmation letter). */
+export const BANK_DETAILS = [
+  ["Account holder", "Brofour Farming (Pty) Ltd"],
+  ["Bank", "FNB"],
+  ["Account type", "Gold Business Account"],
+  ["Account number", "62915963286"],
+  ["Branch code", "210121 (East London)"],
+] as const;
+export const POP_EMAIL = "jonathanbrody26@gmail.com";

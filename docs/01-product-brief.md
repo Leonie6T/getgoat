@@ -127,3 +127,4 @@ Volume: 50 or fewer goats a month. Free or low-cost tiers are enough.
 - Seller phone number shown only after payment. Before payment buyers use WhatsApp buttons (no Call button).
 - Terms and conditions page (`/terms`), linked in every buyer footer and in the checkout consent. Refunds take 10–15 working days.
 - Payfast merchant reference = order number (GG-00008); item name holds breed, sex and tag.
+- Payment options at checkout: **Card (Payfast)**, **EFT** (FNB details, order number as reference, proof of payment to jonathanbrody26@gmail.com) and **Cash at collection**. EFT and cash orders hide the goat from the marketplace at once; the seller taps **Mark as paid** (receipt follows) or **Cancel order** (goat stays hidden until shown again by hand). New order status AWAITING_PAYMENT and an "Awaiting payment" tab.

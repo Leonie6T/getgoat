@@ -8,7 +8,17 @@ import { useFormStatus } from "react-dom";
  * Always a submit button; the first tap is cancelled and only arms it, so a state
  * change during the click can never turn the first tap into a submit.
  */
-export function ConfirmButton({ label, confirmLabel, className }: { label: string; confirmLabel: string; className: string }) {
+export function ConfirmButton({
+  label,
+  confirmLabel,
+  className,
+  pendingText = "Saving…",
+}: {
+  label: string;
+  confirmLabel: string;
+  className: string;
+  pendingText?: string;
+}) {
   const [armed, setArmed] = useState(false);
   const { pending } = useFormStatus();
   return (
@@ -24,7 +34,7 @@ export function ConfirmButton({ label, confirmLabel, className }: { label: strin
       disabled={pending}
       className={`${className} disabled:opacity-60`}
     >
-      {pending ? "Deleting…" : armed ? confirmLabel : label}
+      {pending ? pendingText : armed ? confirmLabel : label}
     </button>
   );
 }

@@ -58,3 +58,43 @@ export async function markOrderPaid(orderId: string, payfastPaymentId: string) {
     return { result: conflict ? ("refund-needed" as const) : ("paid" as const), order: updated };
   });
 }
+
+/**
+ * EFT or cash order: hide the goat from the marketplace until the seller confirms payment
+ * or cancels. Nothing reopens automatically (owner decision).
+ */
+export async function hideGoatForOrder(goatId: string, orderId: string) {
+  const { count } = await db.goat.updateMany({
+    where: {
+      id: goatId,
+      OR: [{ status: "AVAILABLE" }, { status: "RESERVED", reservedUntil: { lt: new Date() } }],
+    },
+    data: { status: "HIDDEN", reservedUntil: null, reservedOrderId: orderId },
+  });
+  return count === 1;
+}
+
+/** Seller confirms EFT or cash payment. Returns false if a goat was sold to someone else meanwhile. */
+export async function markPaidByHand(orderId: string) {
+  return db.$transaction(async (tx) => {
+    const order = await tx.order.findUnique({ where: { id: orderId }, include: { items: true } });
+    if (!order || order.status !== "AWAITING_PAYMENT") return false;
+    for (const item of order.items) {
+      const { count } = await tx.goat.updateMany({
+        where: { id: item.goatId, status: { in: ["HIDDEN", "AVAILABLE", "RESERVED"] } },
+        data: { status: "SOLD", reservedUntil: null, reservedOrderId: null },
+      });
+      if (count === 0) throw new Error("This goat is already sold to someone else.");
+    }
+    await tx.order.update({ where: { id: orderId }, data: { status: "PAID", paidAt: new Date() } });
+    return true;
+  });
+}
+
+/** Seller cancels an unpaid EFT or cash order. The goat stays hidden until the seller shows it again. */
+export async function cancelAwaitingOrder(orderId: string) {
+  await db.$transaction([
+    db.order.updateMany({ where: { id: orderId, status: "AWAITING_PAYMENT" }, data: { status: "CANCELLED" } }),
+    db.goat.updateMany({ where: { reservedOrderId: orderId }, data: { reservedOrderId: null } }),
+  ]);
+}

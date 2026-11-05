@@ -24,6 +24,7 @@ export default async function SellerHome() {
   ]);
   const forSale = goats.filter((g) => buyerStatus(g) === "AVAILABLE").length;
   const toRelease = goats.filter((g) => g.status === "SOLD").length;
+  const awaiting = goats.filter((g) => g.status === "HIDDEN" && g.reservedOrderId).length;
 
   return (
     <div className="mx-auto min-h-dvh max-w-md pb-10">
@@ -49,6 +50,19 @@ export default async function SellerHome() {
             <div className="text-sm">Goats for sale</div>
           </div>
         </div>
+        {awaiting > 0 && (
+          <div className="px-4 pb-3">
+            <Link
+              href="/seller/orders?tab=awaiting"
+              className="flex min-h-12 items-center justify-between rounded-xl border border-[#b8c7d6] bg-[#eef3f8] px-3 font-semibold text-[#33404d] no-underline"
+            >
+              <span>
+                {awaiting} order{awaiting > 1 ? "s" : ""} awaiting EFT or cash
+              </span>
+              <span>›</span>
+            </Link>
+          </div>
+        )}
         <PhoneAlerts />
         <div className="flex flex-col gap-2 px-4 pb-4">
           <ShareLink
@@ -90,7 +104,7 @@ export default async function SellerHome() {
                       {goatTitle(g)} · {g.idMarkValue}
                     </div>
                     <div className="text-[13px] text-muted">
-                      {formatRand(g.priceCents)} · <strong>{STATUS_LABEL[buyerStatus(g)]}</strong>
+                      {formatRand(g.priceCents)} · <strong>{g.status === "HIDDEN" && g.reservedOrderId ? "Awaiting payment" : STATUS_LABEL[buyerStatus(g)]}</strong>
                     </div>
                   </div>
                 </Link>

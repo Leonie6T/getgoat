@@ -44,8 +44,16 @@ enum IdType {
   PASSPORT
 }
 
+enum PaymentMethod {
+  CARD
+  EFT
+  CASH
+}
+
 enum OrderStatus {
   PENDING
+  /// EFT or cash: goat hidden, seller confirms payment by hand
+  AWAITING_PAYMENT
   PAID
   COLLECTED
   CANCELLED
@@ -127,12 +135,13 @@ model Buyer {
 }
 
 model Order {
-  id                String      @id @default(cuid())
-  number            Int         @unique @default(autoincrement())
+  id                String        @id @default(cuid())
+  number            Int           @unique @default(autoincrement())
   buyerId           String
-  buyer             Buyer       @relation(fields: [buyerId], references: [id])
+  buyer             Buyer         @relation(fields: [buyerId], references: [id])
   totalCents        Int
-  status            OrderStatus @default(PENDING)
+  paymentMethod     PaymentMethod @default(CARD)
+  status            OrderStatus   @default(PENDING)
   driverName        String?
   driverIdNumberEnc String?
   vehicleReg        String?
@@ -144,8 +153,8 @@ model Order {
   collectedAt       DateTime?
   documentUrl       String?
   items             OrderItem[]
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
 
   @@index([status])
 }
@@ -172,6 +181,7 @@ model AppSetting {
 enum NotificationKind {
   SALE
   REFUND_NEEDED
+  AWAITING_PAYMENT
 }
 
 /// Seller inbox: shown in the app and sent as a phone alert.

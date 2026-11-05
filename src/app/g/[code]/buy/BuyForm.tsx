@@ -8,6 +8,7 @@ export function BuyForm({ code, price }: { code: string; price: string }) {
   const [state, action, pending] = useActionState<BuyState, FormData>(startCheckout.bind(null, code), {});
   const [idType, setIdType] = useState<"SA_ID" | "PASSPORT">("SA_ID");
   const [collector, setCollector] = useState<"me" | "other">("me");
+  const [method, setMethod] = useState<"CARD" | "EFT" | "CASH" | null>(null);
   // Hide a field's error once the buyer edits that field.
   const [edited, setEdited] = useState<Set<string>>(new Set());
   useEffect(() => setEdited(new Set()), [state]);
@@ -101,6 +102,35 @@ export function BuyForm({ code, price }: { code: string; price: string }) {
         </div>
       </details>
 
+      <fieldset className="flex flex-col gap-2">
+        <legend className="mb-1 text-sm font-semibold">How do you want to pay?</legend>
+        <input type="hidden" name="paymentMethod" value={method ?? ""} />
+        {(
+          [
+            ["CARD", "Card (Payfast)", "Visa, Mastercard, Instant EFT, SnapScan. Goat is yours at once."],
+            ["EFT", "EFT (bank transfer)", "Pay into our FNB account. Email proof of payment."],
+            ["CASH", "Cash at collection", "Pay cash when you collect at Glen Victor."],
+          ] as const
+        ).map(([value, title, hint]) => (
+          <button
+            key={value}
+            type="button"
+            onClick={() => setMethod(value)}
+            aria-pressed={method === value}
+            className={`flex min-h-14 flex-col items-start rounded-[10px] border-2 px-3 py-2 text-left ${
+              method === value ? "border-green bg-green-tint" : "border-line bg-card"
+            }`}
+          >
+            <span className="text-[16px] font-bold">
+              {method === value ? "● " : "○ "}
+              {title}
+            </span>
+            <span className="text-[13px] text-muted">{hint}</span>
+          </button>
+        ))}
+        {err.paymentMethod && <span className="text-[13px] text-[#a3341b]">{err.paymentMethod}</span>}
+      </fieldset>
+
       <label className="flex items-start gap-3 text-[14px]">
         <input type="checkbox" name="consent" className="mt-0.5 size-6 shrink-0 accent-green" aria-invalid={!!err.consent} />
         <span>
@@ -124,10 +154,20 @@ export function BuyForm({ code, price }: { code: string; price: string }) {
       )}
 
       <button type="submit" disabled={pending} className={primaryButton}>
-        {pending ? "Please wait…" : `Pay ${price}`}
+        {pending
+          ? "Please wait…"
+          : method === "EFT"
+            ? `Order – pay ${price} by EFT`
+            : method === "CASH"
+              ? `Order – pay ${price} cash at collection`
+              : `Pay ${price}`}
       </button>
       <p className="-mt-1 text-center text-[13px] text-muted">
-        Secure payment with Payfast. The goat is held for you for 5 minutes.
+        {method === "CARD"
+          ? "Secure payment with Payfast. The goat is held for you for 5 minutes."
+          : method
+            ? "The goat is reserved for you until payment is confirmed."
+            : "Choose how you want to pay."}
       </p>
     </form>
   );
