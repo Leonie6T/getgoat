@@ -58,7 +58,7 @@ export default function TermsPage() {
               All goats are collected at <strong>{COLLECTION_POINT}</strong>.
             </li>
             <li>Collection is possible from the day after you pay. Agree a time with us on WhatsApp.</li>
-            <li>Bring your receipt and your ID. If someone collects for you, they bring their own ID.</li>
+            <li>Show your receipt (on your phone is fine) when you collect. If someone collects for you, give them the receipt link.</li>
             <li>
               You (or your driver) and the seller sign the stock removal document at collection, as the Stock Theft Act
               requires. Keep your copy for at least one year.

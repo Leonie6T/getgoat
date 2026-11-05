@@ -67,7 +67,7 @@ export default async function ReceiptPage({ params }: { params: Promise<{ id: st
           <strong>WhatsApp:</strong> <a href={sellerWhatsApp(`Hi, about my order ${orderNumber(order.number)}.`)}>{SELLER_PHONE}</a>
         </p>
         <p className="mt-1 text-[13px] text-muted">
-          Bring this receipt and your ID when you collect. The stock removal document is signed at collection.{" "}
+          Show this receipt when you collect. The stock removal document is signed at collection.{" "}
           <a href="/terms">Terms</a>
         </p>
       </section>
