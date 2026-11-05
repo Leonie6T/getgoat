@@ -168,3 +168,31 @@ model AppSetting {
   value     String
   createdAt DateTime @default(now())
 }
+
+enum NotificationKind {
+  SALE
+  REFUND_NEEDED
+}
+
+/// Seller inbox: shown in the app and sent as a phone alert.
+model Notification {
+  id        String           @id @default(cuid())
+  kind      NotificationKind
+  title     String
+  body      String
+  url       String
+  readAt    DateTime?
+  createdAt DateTime         @default(now())
+
+  @@index([readAt])
+}
+
+/// Browser push subscription of a seller device.
+model PushSubscription {
+  id        String   @id @default(cuid())
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  userAgent String?
+  createdAt DateTime @default(now())
+}
