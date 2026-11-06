@@ -41,8 +41,8 @@ export default async function BuyPage({ params }: { params: Promise<{ code: stri
         <h1 className="pb-1 pt-4 text-[22px] font-extrabold">Your details</h1>
         <p className="pb-3 text-[14px] text-muted">Needed for the stock removal document (Stock Theft Act).</p>
         <p className="mb-4 rounded-[10px] border border-line bg-card p-3 text-[14px]">
-          <strong>Collection:</strong> {COLLECTION_POINT}. Available from{" "}
-          <strong>{formatDay(collectionFrom(new Date()))}</strong> if you pay today.
+          This goat will be available for collection from <strong>{formatDay(collectionFrom(new Date()))}</strong> if
+          you pay today, at {COLLECTION_POINT}.
         </p>
         {status === "AVAILABLE" ? (
           <BuyForm code={goat.code} price={formatRand(goat.priceCents)} />
