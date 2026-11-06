@@ -109,7 +109,7 @@ export function BuyForm({ code, price, cardEnabled }: { code: string; price: str
           [
             ["CARD", "Card (Payfast)", "Visa, Mastercard, Instant EFT, SnapScan. Goat is yours at once."],
             ["EFT", "EFT (bank transfer)", "Pay into our FNB account. Email proof of payment."],
-            ["CASH", "Cash at collection", "Pay cash when you collect at Glen Victor."],
+            ["CASH", "Cash at collection", "Pay cash when you collect your goat."],
           ] as const
         ).map(([value, title, hint]) => {
           const off = value === "CARD" && !cardEnabled;

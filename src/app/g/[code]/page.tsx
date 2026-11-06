@@ -9,7 +9,7 @@ import { IconAge, IconBaby, IconChat, IconColour, IconFemale, IconSex, IconWeigh
 import { db } from "@/lib/db";
 import { cardPaymentsEnabled } from "@/lib/payfast";
 import { MARK_LABEL, PREGNANT_LABEL, SEX_LABEL, ageLabel, buyerStatus, formatRand, goatTitle, mediaUrl } from "@/lib/goats";
-import { COLLECTION_POINT, collectionFrom, formatDay, sellerWhatsApp, siteUrl } from "@/lib/site";
+import { collectionFrom, formatDay, sellerWhatsApp, siteUrl } from "@/lib/site";
 import { Gallery } from "./Gallery";
 
 export const dynamic = "force-dynamic";
@@ -130,7 +130,6 @@ export default async function GoatPage({ params }: { params: Promise<{ code: str
         {goat.notes && <p className="text-[15px]">{goat.notes}</p>}
         <div className="mt-4 rounded-[10px] border border-line bg-card p-3 text-[15px]">
           <div className="font-bold">Collection</div>
-          <div>{COLLECTION_POINT}</div>
           <div>
             This goat will be available for collection from <strong>{formatDay(collectionFrom(new Date()))}</strong>{" "}
             if you pay today.

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SiteFooter } from "@/components/SiteFooter";
 import { TopBar } from "@/components/TopBar";
 import { HOLD_MINUTES } from "@/lib/orders";
-import { COLLECTION_DAYS, COLLECTION_POINT, SELLER_NAME, sellerWhatsApp } from "@/lib/site";
+import { COLLECTION_DAYS, SELLER_NAME, sellerWhatsApp } from "@/lib/site";
 
 export const metadata: Metadata = { title: "Terms and conditions" };
 
@@ -67,7 +67,8 @@ export default function TermsPage() {
         <Section n={4} title="Collection">
           <ul className="list-disc pl-5">
             <li>
-              All goats are collected at <strong>{COLLECTION_POINT}</strong>.
+              All goats are collected at our collection point near East London. You get the address with your
+              receipt.
             </li>
             <li>Collection is possible from the day after you pay. Agree a time with us on WhatsApp.</li>
             <li>

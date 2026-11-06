@@ -95,7 +95,7 @@ export function paymentFields(req: PaymentRequest) {
     ["m_payment_id", req.orderNumber],
     ["amount", (req.amountCents / 100).toFixed(2)],
     ["item_name", plain(req.itemName)],
-    ["item_description", plain(`Order ${req.orderNumber} collect at Glen Victor`)],
+    ["item_description", plain(`Order ${req.orderNumber}`)],
   ];
   // The posted values must be exactly the signed values: trim, then drop empty ones.
   const nonEmpty = fields.map(([k, v]) => [k, v.trim()] as [string, string]).filter(([, v]) => v !== "");
