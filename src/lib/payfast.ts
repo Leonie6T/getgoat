@@ -21,6 +21,11 @@ export function payfastConfig() {
   };
 }
 
+/** Card payments are offered to buyers only with live Payfast keys (PAYFAST_MODE=live). */
+export function cardPaymentsEnabled() {
+  return payfastConfig().live;
+}
+
 /** ITN signature check. In sandbox, also accept the shared account's known passphrase variants. */
 export function itnSignatureOk(fields: [string, string][], signature: string | undefined) {
   if (!signature) return false;

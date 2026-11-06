@@ -4,7 +4,7 @@ import { startTransition, useActionState, useEffect, useState } from "react";
 import { Field, inputClass, primaryButton } from "@/components/ui";
 import { startCheckout, type BuyState } from "./actions";
 
-export function BuyForm({ code, price }: { code: string; price: string }) {
+export function BuyForm({ code, price, cardEnabled }: { code: string; price: string; cardEnabled: boolean }) {
   const [state, action, pending] = useActionState<BuyState, FormData>(startCheckout.bind(null, code), {});
   const [idType, setIdType] = useState<"SA_ID" | "PASSPORT">("SA_ID");
   const [collector, setCollector] = useState<"me" | "other">("me");
@@ -111,23 +111,28 @@ export function BuyForm({ code, price }: { code: string; price: string }) {
             ["EFT", "EFT (bank transfer)", "Pay into our FNB account. Email proof of payment."],
             ["CASH", "Cash at collection", "Pay cash when you collect at Glen Victor."],
           ] as const
-        ).map(([value, title, hint]) => (
-          <button
-            key={value}
-            type="button"
-            onClick={() => setMethod(value)}
-            aria-pressed={method === value}
-            className={`flex min-h-14 flex-col items-start rounded-[10px] border-2 px-3 py-2 text-left ${
-              method === value ? "border-green bg-green-tint" : "border-line bg-card"
-            }`}
-          >
-            <span className="text-[16px] font-bold">
-              {method === value ? "● " : "○ "}
-              {title}
-            </span>
-            <span className="text-[13px] text-muted">{hint}</span>
-          </button>
-        ))}
+        ).map(([value, title, hint]) => {
+          const off = value === "CARD" && !cardEnabled;
+          return (
+            <button
+              key={value}
+              type="button"
+              disabled={off}
+              onClick={() => setMethod(value)}
+              aria-pressed={method === value}
+              className={`flex min-h-14 flex-col items-start rounded-[10px] border-2 px-3 py-2 text-left disabled:cursor-not-allowed disabled:border-line disabled:bg-ground disabled:opacity-55 ${
+                method === value ? "border-green bg-green-tint" : "border-line bg-card"
+              }`}
+            >
+              <span className="text-[16px] font-bold">
+                {method === value ? "● " : "○ "}
+                {title}
+                {off && <span className="ml-2 rounded-full bg-line px-2 py-0.5 text-[11px] font-bold text-ink">Coming soon</span>}
+              </span>
+              <span className="text-[13px] text-muted">{off ? "Pay by EFT or cash for now." : hint}</span>
+            </button>
+          );
+        })}
         {err.paymentMethod && <span className="text-[13px] text-[#a3341b]">{err.paymentMethod}</span>}
       </fieldset>
 

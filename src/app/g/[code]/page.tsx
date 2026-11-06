@@ -7,6 +7,7 @@ import { TopBar } from "@/components/TopBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { IconAge, IconBaby, IconChat, IconColour, IconFemale, IconSex, IconWeight } from "@/components/icons";
 import { db } from "@/lib/db";
+import { cardPaymentsEnabled } from "@/lib/payfast";
 import { MARK_LABEL, PREGNANT_LABEL, SEX_LABEL, ageLabel, buyerStatus, formatRand, goatTitle, mediaUrl } from "@/lib/goats";
 import { COLLECTION_POINT, collectionFrom, formatDay, sellerWhatsApp, siteUrl } from "@/lib/site";
 import { Gallery } from "./Gallery";
@@ -156,7 +157,9 @@ export default async function GoatPage({ params }: { params: Promise<{ code: str
             >
               Buy this goat
             </Link>
-            <p className="mt-1 text-center text-[12px] text-muted">Pay safely online with Payfast</p>
+            <p className="mt-1 text-center text-[12px] text-muted">
+              {cardPaymentsEnabled() ? "Pay by card, EFT or cash at collection" : "Pay by EFT or cash at collection"}
+            </p>
           </>
         )}
       </div>

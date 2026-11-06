@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { TopBar } from "@/components/TopBar";
 import { db } from "@/lib/db";
 import { buyerStatus, formatRand, goatTitle, mediaUrl } from "@/lib/goats";
+import { cardPaymentsEnabled } from "@/lib/payfast";
 import { COLLECTION_POINT, collectionFrom, formatDay } from "@/lib/site";
 import { BuyForm } from "./BuyForm";
 
@@ -45,7 +46,7 @@ export default async function BuyPage({ params }: { params: Promise<{ code: stri
           you pay today, at {COLLECTION_POINT}.
         </p>
         {status === "AVAILABLE" ? (
-          <BuyForm code={goat.code} price={formatRand(goat.priceCents)} />
+          <BuyForm code={goat.code} price={formatRand(goat.priceCents)} cardEnabled={cardPaymentsEnabled()} />
         ) : (
           <div className="flex flex-col gap-3 rounded-xl border border-line bg-card p-5 text-center">
             <p className="text-lg font-bold">
