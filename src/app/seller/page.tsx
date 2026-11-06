@@ -12,8 +12,7 @@ import { logout } from "./login/actions";
 
 export const dynamic = "force-dynamic";
 
-export default async function SellerHome({ searchParams }: { searchParams: Promise<{ reset?: string }> }) {
-  const flags = await searchParams;
+export default async function SellerHome() {
   const [goats, origin, unread] = await Promise.all([
     db.goat.findMany({
       where: { status: { not: "COLLECTED" } },
@@ -51,11 +50,6 @@ export default async function SellerHome({ searchParams }: { searchParams: Promi
             <div className="text-sm">Goats for sale</div>
           </div>
         </div>
-        {flags.reset && (
-          <p role="status" className="mx-4 mb-3 rounded-[10px] bg-green-tint px-3 py-2 text-[15px] text-green">
-            Test data cleared. Ready for real goats.
-          </p>
-        )}
         {awaiting > 0 && (
           <div className="px-4 pb-3">
             <Link
