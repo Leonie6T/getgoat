@@ -71,8 +71,8 @@ export default function TermsPage() {
             </li>
             <li>Collection is possible from the day after you pay. Agree a time with us on WhatsApp.</li>
             <li>
-              <strong>Collect within {COLLECTION_DAYS} days</strong> after the first collection day. The last day is on
-              your receipt. If you cannot collect in time, WhatsApp us before the last day.
+              <strong>Collect within {COLLECTION_DAYS} days</strong> after the collection date on your receipt. If you
+              cannot collect in time, WhatsApp us before then.
             </li>
             <li>Show your receipt (on your phone is fine) when you collect. If someone collects for you, give them the receipt link.</li>
             <li>

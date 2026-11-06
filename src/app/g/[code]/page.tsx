@@ -131,7 +131,8 @@ export default async function GoatPage({ params }: { params: Promise<{ code: str
           <div className="font-bold">Collection</div>
           <div>{COLLECTION_POINT}</div>
           <div>
-            Available from <strong>{formatDay(collectionFrom(new Date()))}</strong> if you pay today.
+            This goat will be available for collection from <strong>{formatDay(collectionFrom(new Date()))}</strong>{" "}
+            if you pay today.
           </div>
         </div>
         <a
