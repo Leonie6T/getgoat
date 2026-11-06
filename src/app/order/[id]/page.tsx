@@ -106,18 +106,18 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
               </a>
             </section>
             <p className="text-center text-[15px]">
-              3. When the money is in our account, {SELLER_NAME} sends your receipt on WhatsApp. Collection is at{" "}
-              {COLLECTION_POINT}, from the day after payment is confirmed.
+              3. When the money is in our account, {SELLER_NAME} sends your receipt with the collection address on
+              WhatsApp. Collection is from the day after payment is confirmed.
             </p>
           </>
         ) : (
           <section className="rounded-xl border-2 border-green bg-card p-3.5 text-[16px]">
             <h2 className="pb-1 font-bold">Pay {formatRand(order.totalCents)} cash when you collect</h2>
-            <p>{COLLECTION_POINT}</p>
-            <p className="mt-1">
+            <p>
               Your goat will be available for collection from <strong>{formatDay(collectionFrom(order.createdAt))}</strong>.
               Bring the exact amount.
             </p>
+            <p className="mt-1">{SELLER_NAME} sends you the collection address and time on WhatsApp.</p>
             <p className="mt-1 text-[14px] text-muted">You get your receipt when you have paid.</p>
           </section>
         )}

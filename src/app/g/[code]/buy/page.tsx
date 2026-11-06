@@ -6,7 +6,7 @@ import { TopBar } from "@/components/TopBar";
 import { db } from "@/lib/db";
 import { buyerStatus, formatRand, goatTitle, mediaUrl } from "@/lib/goats";
 import { cardPaymentsEnabled } from "@/lib/payfast";
-import { COLLECTION_POINT, collectionFrom, formatDay } from "@/lib/site";
+import { collectionFrom, formatDay } from "@/lib/site";
 import { BuyForm } from "./BuyForm";
 
 export const dynamic = "force-dynamic";
@@ -43,7 +43,7 @@ export default async function BuyPage({ params }: { params: Promise<{ code: stri
         <p className="pb-3 text-[14px] text-muted">Needed for the stock removal document (Stock Theft Act).</p>
         <p className="mb-4 rounded-[10px] border border-line bg-card p-3 text-[14px]">
           This goat will be available for collection from <strong>{formatDay(collectionFrom(new Date()))}</strong> if
-          you pay today, at {COLLECTION_POINT}.
+          you pay today. You get the collection address once you have paid.
         </p>
         {status === "AVAILABLE" ? (
           <BuyForm code={goat.code} price={formatRand(goat.priceCents)} cardEnabled={cardPaymentsEnabled()} />
