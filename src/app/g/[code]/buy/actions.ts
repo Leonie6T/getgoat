@@ -7,7 +7,7 @@ import { db } from "@/lib/db";
 import { formatRand, goatTitle } from "@/lib/goats";
 import { notifySeller } from "@/lib/notify";
 import { HOLD_MINUTES, hideGoatForOrder, holdGoat } from "@/lib/orders";
-import { orderNumber } from "@/lib/payfast";
+import { cardPaymentsEnabled, orderNumber } from "@/lib/payfast";
 import { clientIp, withinLimit } from "@/lib/rate-limit";
 import { isValidPassport, isValidSaId, normaliseCellphone } from "@/lib/validate";
 
@@ -83,7 +83,8 @@ export async function startCheckout(goatCode: string, _prev: BuyState, formData:
   const rawMethod = String(formData.get("paymentMethod") ?? "");
   const method = rawMethod === "CARD" || rawMethod === "EFT" || rawMethod === "CASH" ? rawMethod : null;
   if (!method) fieldErrors.paymentMethod = "Choose how you want to pay";
-  if (!v || !method) return { error: "Please check the marked fields.", fieldErrors };
+  if (method === "CARD" && !cardPaymentsEnabled()) fieldErrors.paymentMethod = "Card payment is not available yet. Choose EFT or cash.";
+  if (!v || !method || fieldErrors.paymentMethod) return { error: "Please check the marked fields.", fieldErrors };
 
   // Stop fake holds that block goats: 3 per cellphone and 6 per device per hour.
   const okCell = await withinLimit(`hold:cell:${v.cellphone}`, 3, 3600);
